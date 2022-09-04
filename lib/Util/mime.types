@@ -1,0 +1,18 @@
+# Common MIME types for e-books
+application/epub+zip                epub
+application/msword                  doc
+application/pdf                     pdf
+application/postscript              ps
+application/vnd.amazon.mobi8-ebook  azw azw3 kfx
+application/vnd.ms-htmlhelp         chm
+application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
+application/vnd.ms-xpsdocument      xps oxps
+application/x-fictionbook+xml       fb2
+application/x-ms-reader             lit
+image/vnd.djvu                      djvu
+text/rtf                            rtf
+text/plain                          txt
+# Image MIME types
+image/jpeg                          jpg
+image/x-icon                        ico
+image/svg+xml                       svg

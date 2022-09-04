@@ -1,0 +1,68 @@
+{
+    "name": "oldnomad/calibre_opds",
+    "description": "Simple OPDS server that uses Calibre database as a backend.",
+    "type": "project",
+    "keywords": [],
+    "homepage": "https://gitlab.com/oldnomad/calibre_opds",
+    "readme": "README.md",
+    "license": "AGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Alec Kojaev",
+            "email": "alec@kojaev.name"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "OCA\\Calibre2OPDS\\": "lib",
+            "OCP\\": "vendor/nextcloud/ocp/OCP"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Stubs\\": "tests/stubs"
+        }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "nextcloud/translationtool",
+                "version": "0-dev",
+                "dist": {
+                    "url": "https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar",
+                    "type": "file"
+                }
+            }
+        }
+    ],
+    "require-dev": {
+        "nextcloud/ocp": "^26",
+        "nextcloud/coding-standard": "^1",
+        "nextcloud/translationtool": "^0-dev",
+        "php-parallel-lint/php-parallel-lint": "^1",
+        "psalm/phar": "^5",
+        "phpunit/phpunit": "^10"
+    },
+    "scripts": {
+        "cs": "php-cs-fixer fix --using-cache=no --dry-run --diff",
+        "lint": "parallel-lint ./appinfo ./lib",
+        "phpunit": "XDEBUG_MODE=coverage phpunit",
+        "psalm": "psalm.phar --config=psalm.xml --no-cache",
+        "tests": [
+            "@lint",
+            "@cs",
+            "@psalm",
+            "@phpunit"
+        ],
+        "translate:scan": "php ./vendor/nextcloud/translationtool/translationtool.phar create-pot-files",
+        "translate:generate": "php ./vendor/nextcloud/translationtool/translationtool.phar convert-po-files"
+    },
+    "scripts-descriptions": {
+        "cs": "Checks that the code conforms to the coding standard.",
+        "lint": "Runs unit tests.",
+        "phpunit": "Run all unit tests.",
+        "psalm": "Runs static analysis.",
+        "tests": "Runs all available tests."
+    }
+}

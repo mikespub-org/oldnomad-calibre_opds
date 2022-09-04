@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" height="128" width="128">
+	<title>Icon for Calibre2OPDS</title>
+	<style>
+		.book1 {
+			fill: firebrick;
+			stroke: black;
+			stroke-width: 2px;
+		}
+		.book2 {
+			fill: darkgreen;
+			stroke: black;
+			stroke-width: 2px;
+		}
+		.book3 {
+			fill: darkblue;
+			stroke: black;
+			stroke-width: 2px;
+		}
+	</style>
+	<symbol id="book" height="96" width="24">
+		<rect width="24" height="96" rx="4" ry="4"/>
+		<line x1="0" x2="24" y1="12" y2="12"/>
+		<line x1="0" x2="24" y1="84" y2="84"/>
+	</symbol>
+	<symbol id="slantbook" height="99" width="48">
+		<!--
+			dY = H*(1 - cos(phi))        ~=  3.27
+			W' = W*cos(phi) + H*sin(phi) ~= 48.03
+			H' = H*cos(phi) + W*sin(phi) ~= 98.94
+			We add dX = -2 because angles are rounded
+			(H' - H) is 3px, so we add it to dY
+		-->
+		<use href="#book" transform="rotate(-15) translate(-2 6.27)"/>
+	</symbol>
+	<use href="#book" x="16" y="16" class="book1"/>
+	<use href="#book" x="40" y="16" class="book2"/>
+	<use href="#slantbook" x="64" y="13" class="book3"/>
+</svg>

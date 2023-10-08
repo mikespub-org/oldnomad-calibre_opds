@@ -3,161 +3,165 @@
 # This file is distributed under the same license as the Nextcloud package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2023-10-08 17:02+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2023-10-08 19:59+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:62
 msgid "Nextcloud OPDS Library"
-msgstr ""
+msgstr "Бібліотека Nextcloud OPDS"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:63
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:88
 msgid "Authors"
-msgstr ""
+msgstr "Автори"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:63
 msgid "All authors"
-msgstr ""
+msgstr "Всі автори"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:64
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:137
 msgid "Publishers"
-msgstr ""
+msgstr "Видавництва"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:64
 msgid "All publishers"
-msgstr ""
+msgstr "Всі видавництва"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:65
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:159
 msgid "Languages"
-msgstr ""
+msgstr "Мови"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:65
 msgid "All languages"
-msgstr ""
+msgstr "Всі мови"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:66
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:181
 msgid "Series"
-msgstr ""
+msgstr "Серії"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:66
 msgid "All series"
-msgstr ""
+msgstr "Всі серії"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:67
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:203
 msgid "Tags"
-msgstr ""
+msgstr "Теги"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:67
 msgid "All tags"
-msgstr ""
+msgstr "Всі теги"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:68
 msgid "Books"
-msgstr ""
+msgstr "Книги"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:68
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:225
 msgid "All books"
-msgstr ""
+msgstr "Всі книги"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:90
 #, php-format
 msgid "Authors with name starting on %1$s"
-msgstr ""
+msgstr "Автори, імена яких починаються на %1$s"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:115
 msgid "Authors by prefix"
-msgstr ""
+msgstr "Автори, згруповані за початком імені"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:231
 #, php-format
 msgid "All books matching: /%1$s/"
-msgstr ""
+msgstr "Всі книги, які відповідають /%1$s/"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:238
 #, php-format
 msgid "All books by author: %1$s"
-msgstr ""
+msgstr "Всі книги автора: %1$s"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:248
 #, php-format
 msgid "All books by publisher: %1$s"
-msgstr ""
+msgstr "Всі книги видавництва: %1$s"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:258
 #, php-format
 msgid "All books in language: %1$s"
-msgstr ""
+msgstr "Всі книги мовою: %1$s"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:265
 #, php-format
 msgid "All books in series: %1$s"
-msgstr ""
+msgstr "Всі книги серії: %1$s"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:272
 #, php-format
 msgid "All books with tag: %1$s"
-msgstr ""
+msgstr "Всі книги з тегом: %1$s"
 
 #. TRANSLATORS: No more than 16 characters
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:299
 msgid "Search"
-msgstr ""
+msgstr "Пошук"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:300
 msgid "Search books"
-msgstr ""
+msgstr "Пошук книг"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:301
 msgid ""
 "Search books with matching titles, descriptions, authors, series, or tags."
 msgstr ""
+"Шукайте книги з відповідними назвами, описами, авторами, серіями або тегами."
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/FeedBuilder/OpdsFeedBuilder.php:76
 #, php-format
 msgid "Authors: %1$d"
-msgstr ""
+msgstr "Авторів: %1$d"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/lib/FeedBuilder/OpdsFeedBuilder.php:84
 #, php-format
 msgid "Books: %1$d"
-msgstr ""
+msgstr "Книг: %1$d"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/specialAppInfoFakeDummyForL10nScript.php:2
 msgid "Calibre2OPDS"
-msgstr ""
+msgstr "Calibre2OPDS"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "Simple OPDS server that uses Calibre database as a backend."
 msgstr ""
+"Простий сервер OPDS, який використовує базу даних Calibre як джерело даних."
 
 #: /home/alec/workspace/calibre2opds-nextcloud/templates/settings.personal.php:3
 msgid "Calibre OPDS library"
-msgstr ""
+msgstr "Бібліотека Calibre OPDS"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/templates/settings.personal.php:5
 msgid "Publish your Calibre library in OPDS"
-msgstr ""
+msgstr "Опублікуйте свою бібліотеку Calibre в OPDS"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/templates/settings.personal.php:8
 msgid "Library root folder:"
-msgstr ""
+msgstr "Коренева папка бібліотеки:"
 
 #: /home/alec/workspace/calibre2opds-nextcloud/templates/settings.personal.php:14
 msgid "Saved"
-msgstr ""
+msgstr "Збережено"

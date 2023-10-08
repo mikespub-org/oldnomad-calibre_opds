@@ -87,7 +87,7 @@ class OpdsController extends Controller {
 			if ($prefix === '') {
 				$title = $this->l->t('Authors');
 			} else {
-				$title = $this->l->t('Authors by prefix %1$s', [$prefix]);
+				$title = $this->l->t('Authors with name starting on %1$s', [$prefix]);
 			}
 			$builder = $this->feed->createBuilder('authors', $this->request->getParams(), $title);
 			foreach (CalibreAuthor::getByPrefix($lib, $prefix) as $item) {
@@ -298,7 +298,7 @@ class OpdsController extends Controller {
 				/// TRANSLATORS: No more than 16 characters
 				$this->l->t('Search'),
 				$this->l->t('Search books'),
-				$this->l->t('Search books with matching titles, authors, series, or tags.'),
+				$this->l->t('Search books with matching titles, descriptions, authors, series, or tags.'),
 				$this->settings->getAppImageLink('icon.ico'),
 				$this->settings->getAppRouteLink('books', [
 					'criterion' => CalibreBookCriteria::SEARCH->value,

@@ -73,7 +73,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 			}
 			$routeName = 'authors';
 			$routeArgs = [ 'prefix' => $item->prefix ];
-			$summary = $this->l->t('Authors: %1$s', [$item->count]);
+			$summary = $this->l->t('Authors: %1$d', [$item->count]);
 		} else {
 			if ($criterion === CalibreBookCriteria::LANGUAGE) {
 				/** @var string $item->code */
@@ -81,7 +81,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 			}
 			$routeName = 'books';
 			$routeArgs = [ 'criterion' => $criterion->value, 'id' => $item->id ];
-			$summary = $this->l->t('Books: %1$s', [$item->count]);
+			$summary = $this->l->t('Books: %1$d', [$item->count]);
 		}
 		/** @var string */
 		$uriPrefix = $item::URI;

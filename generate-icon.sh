@@ -1,5 +1,8 @@
 #!/bin/sh
 #
+# SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
+# SPDX-License-Identifier:  CC0-1.0
+#
 # This requires:
 # - librsvg2-bin (for `rsvg-convert`);
 # - netpbm (for `pngtopam` and `pamtowinicon`).

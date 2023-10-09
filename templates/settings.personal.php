@@ -1,4 +1,9 @@
-<?php script('calibre_opds', 'settings'); ?>
+<?php
+// SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+script('calibre_opds', 'settings');
+?>
 <div id="calibre_opds" class="section">
 	<h2><?php p($l->t('Calibre OPDS library')); ?></h2>
 	<form action="personal.php">

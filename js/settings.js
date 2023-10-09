@@ -1,4 +1,7 @@
 /**
+ * SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ *
  * Update Calibre2OPDS settings
  */
 (function (window, document, $) {

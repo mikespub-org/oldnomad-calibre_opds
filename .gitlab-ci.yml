@@ -1,0 +1,38 @@
+image: debian:bookworm-slim
+
+stages:
+  - test
+  - deploy
+
+before_script:
+  - apt-get update -yqq
+  - apt-get install -yqq git make composer librsvg2-bin netpbm php-xdebug php-sqlite3 php-curl php-xml php-mbstring php-json php-zip php-intl
+
+test-job:
+  stage: test
+  script:
+    - composer update
+    - composer tests
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: .coverage/cobertura.xml
+    untracked: false
+    when: on_success
+    expire_in: 30 days
+
+deploy-job:
+  stage: deploy
+  only:
+    - tags
+  script:
+    - composer update --no-dev
+    - ./generate-icon.sh
+    - make appstore
+  artifacts:
+    paths:
+      - build/artifacts/appstore/calibre_opds.tar.gz
+    untracked: false
+    when: on_success
+    expire_in: 30 days

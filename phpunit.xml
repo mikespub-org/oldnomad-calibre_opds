@@ -21,7 +21,7 @@
   <coverage pathCoverage="false">
     <report>
       <html outputDirectory=".coverage/html"/>
-      <xml outputDirectory=".coverage/xml"/>
+      <cobertura outputFile=".coverage/cobertura.xml"/>
     </report>
   </coverage>
   <source>

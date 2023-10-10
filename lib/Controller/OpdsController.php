@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace OCA\Calibre2OPDS\Controller;
 
 use Exception;
+use OCA\Calibre2OPDS\Calibre\ICalibreDB;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthor;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthorPrefix;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreBook;
@@ -27,6 +28,7 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\StreamResponse;
+use OCP\Files\Folder;
 use OCP\IL10N;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
@@ -51,24 +53,25 @@ class OpdsController extends Controller {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
+	 * Wrapper for controller routes.
+	 *
+	 * @param callable(Folder,ICalibreDB):Response $func function to wrap.
+	 * @return Response route response.
 	 */
-	public function index(): Response {
+	private function methodWrapper(callable $func): Response {
 		try {
+			if (!$this->settings->isLoggedIn()) {
+				return (new Response())->setStatus(Http::STATUS_UNAUTHORIZED)->addHeader(
+					'WWW-Authenticate',
+					'Basic realm="Nextcloud authentication needed"'
+				);
+			}
 			$libPath = $this->settings->getLibraryFolder();
 			if (is_null($libPath)) {
 				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
 			}
 			$lib = $this->calibre->getDatabase($libPath);
-			$builder = $this->feed->createBuilder('index', $this->request->getParams(), $this->l->t('Nextcloud OPDS Library'));
-			$builder->addSubsectionItem('authors', 'author_prefixes', $this->l->t('Authors'), $this->l->t('All authors'));
-			$builder->addSubsectionItem('publishers', 'publishers', $this->l->t('Publishers'), $this->l->t('All publishers'));
-			$builder->addSubsectionItem('languages', 'languages', $this->l->t('Languages'), $this->l->t('All languages'));
-			$builder->addSubsectionItem('series', 'series', $this->l->t('Series'), $this->l->t('All series'));
-			$builder->addSubsectionItem('tags', 'tags', $this->l->t('Tags'), $this->l->t('All tags'));
-			$builder->addSubsectionItem('books', 'books', $this->l->t('Books'), $this->l->t('All books'));
-			return $builder->getResponse();
+			return call_user_func($func, $libPath, $lib);
 		} catch (Exception $e) {
 			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
 			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
@@ -78,14 +81,28 @@ class OpdsController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
+	 */
+	public function index(): Response {
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
+			$builder = $this->feed->createBuilder('index', $this->request->getParams(), $this->l->t('Nextcloud OPDS Library'));
+			$builder->addSubsectionItem('authors', 'author_prefixes', $this->l->t('Authors'), $this->l->t('All authors'));
+			$builder->addSubsectionItem('publishers', 'publishers', $this->l->t('Publishers'), $this->l->t('All publishers'));
+			$builder->addSubsectionItem('languages', 'languages', $this->l->t('Languages'), $this->l->t('All languages'));
+			$builder->addSubsectionItem('series', 'series', $this->l->t('Series'), $this->l->t('All series'));
+			$builder->addSubsectionItem('tags', 'tags', $this->l->t('Tags'), $this->l->t('All tags'));
+			$builder->addSubsectionItem('books', 'books', $this->l->t('Books'), $this->l->t('All books'));
+			return $builder->getResponse();
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function authors(string $prefix = ''): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib) use ($prefix): Response {
 			if ($prefix === '') {
 				$title = $this->l->t('Authors');
 			} else {
@@ -96,134 +113,92 @@ class OpdsController extends Controller {
 				$builder->addNavigationEntry($item);
 			}
 			return $builder->getResponse();
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function authorPrefixes(int $length = self::DEFAULT_PREFIX_LENGTH): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
-			$length = $length > 0 ? $length : 1;
+		$length = $length > 0 ? $length : 1;
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib) use ($length): Response {
 			$builder = $this->feed->createBuilder('author_prefixes', $this->request->getParams(), $this->l->t('Authors by prefix'));
 			foreach (CalibreAuthorPrefix::getAll($lib, $length) as $item) {
 				$builder->addNavigationEntry($item);
 			}
 			return $builder->getResponse();
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function publishers(): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
 			$builder = $this->feed->createBuilder('publishers', $this->request->getParams(), $this->l->t('Publishers'));
 			foreach (CalibrePublisher::getAll($lib) as $item) {
 				$builder->addNavigationEntry($item);
 			}
 			return $builder->getResponse();
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function languages(): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
 			$builder = $this->feed->createBuilder('languages', $this->request->getParams(), $this->l->t('Languages'));
 			foreach (CalibreLanguage::getAll($lib) as $item) {
 				$builder->addNavigationEntry($item);
 			}
 			return $builder->getResponse();
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function series(): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
 			$builder = $this->feed->createBuilder('series', $this->request->getParams(), $this->l->t('Series'));
 			foreach (CalibreSeries::getAll($lib) as $item) {
 				$builder->addNavigationEntry($item);
 			}
 			return $builder->getResponse();
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function tags(): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
 			$builder = $this->feed->createBuilder('tags', $this->request->getParams(), $this->l->t('Tags'));
 			foreach (CalibreTag::getAll($lib) as $item) {
 				$builder->addNavigationEntry($item);
 			}
 			return $builder->getResponse();
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function books(string $criterion = '', string $id = ''): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib) use ($criterion, $id): Response {
 			$title = $this->l->t('All books');
 			$upRoute = null;
 			$upParams = [];
@@ -279,23 +254,16 @@ class OpdsController extends Controller {
 				$builder->addBookEntry($item);
 			}
 			return $builder->getResponse();
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function searchXml(): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
 			$resp = new OpenSearchResponse(
 				/// TRANSLATORS: No more than 16 characters
 				$this->l->t('Search'),
@@ -308,23 +276,16 @@ class OpdsController extends Controller {
 				])
 			);
 			return $resp;
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function bookData(string $id, string $type): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib) use ($id, $type): Response {
 			$format = CalibreBookFormat::getByBookAndType($lib, $id, $type);
 			if (is_null($format)) {
 				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
@@ -334,24 +295,16 @@ class OpdsController extends Controller {
 				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
 			}
 			return (new StreamResponse($file->fopen('r')))->addHeader('Content-Type', MimeTypes::getMimeType($type));
-	
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function bookCover(string $id): Response {
-		try {
-			$libPath = $this->settings->getLibraryFolder();
-			if (is_null($libPath)) {
-				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-			}
-			$lib = $this->calibre->getDatabase($libPath);
+		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib) use ($id): Response {
 			$book = CalibreBook::getById($lib, $id);
 			if (is_null($book)) {
 				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
@@ -361,10 +314,6 @@ class OpdsController extends Controller {
 				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
 			}
 			return (new StreamResponse($file->fopen('r')))->addHeader('Content-Type', MimeTypes::getMimeType('jpg'));
-	
-		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
-			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		});
 	}
 }

@@ -93,4 +93,11 @@ interface ISettingsService {
 	 * @return bool `true` if set, `false` on error.
 	 */
 	public function setLibrary(string $libraryRoot): bool;
+
+	/**
+	 * Check whether a user is logged in.
+	 *
+	 * @return bool `true` if logged in, `false` otherwise.
+	 */
+	public function isLoggedIn(): bool;
 }

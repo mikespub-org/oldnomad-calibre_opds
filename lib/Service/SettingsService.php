@@ -135,4 +135,9 @@ class SettingsService implements ISettingsService {
 		$this->config->setUserValue($user->getUID(), Application::APP_ID, 'library', $libraryRoot);
 		return true;
 	}
+
+	public function isLoggedIn(): bool {
+		$user = $this->userSession->getUser();
+		return !is_null($user);
+	}
 }

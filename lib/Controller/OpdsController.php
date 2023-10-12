@@ -85,7 +85,7 @@ class OpdsController extends Controller {
 	 */
 	public function index(): Response {
 		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
-			$builder = $this->feed->createBuilder('index', $this->request->getParams(), $this->l->t('Nextcloud OPDS Library'));
+			$builder = $this->feed->createBuilder('index', $this->request->getParams(), $this->l->t('Calibre OPDS Library'));
 			$builder->addSubsectionItem('authors', 'author_prefixes', $this->l->t('Authors'), $this->l->t('All authors'));
 			$builder->addSubsectionItem('publishers', 'publishers', $this->l->t('Publishers'), $this->l->t('All publishers'));
 			$builder->addSubsectionItem('languages', 'languages', $this->l->t('Languages'), $this->l->t('All languages'));

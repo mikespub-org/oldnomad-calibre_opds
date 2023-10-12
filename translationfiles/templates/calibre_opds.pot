@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2023-10-08 17:02+0300\n"
+"POT-Creation-Date: 2023-10-12 14:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,147 +17,147 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:62
-msgid "Nextcloud OPDS Library"
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:88
+msgid "Calibre OPDS Library"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:63
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:88
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:89
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:107
 msgid "Authors"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:63
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:89
 msgid "All authors"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:64
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:137
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:90
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:142
 msgid "Publishers"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:64
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:90
 msgid "All publishers"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:65
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:159
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:91
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:157
 msgid "Languages"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:65
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:91
 msgid "All languages"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:66
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:181
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:92
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:172
 msgid "Series"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:66
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:92
 msgid "All series"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:67
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:203
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:93
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:187
 msgid "Tags"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:67
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:93
 msgid "All tags"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:68
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:94
 msgid "Books"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:68
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:225
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:94
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:202
 msgid "All books"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:90
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:109
 #, php-format
 msgid "Authors with name starting on %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:115
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:127
 msgid "Authors by prefix"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:231
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:208
 #, php-format
 msgid "All books matching: /%1$s/"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:238
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:215
 #, php-format
 msgid "All books by author: %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:248
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:225
 #, php-format
 msgid "All books by publisher: %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:258
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:235
 #, php-format
 msgid "All books in language: %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:265
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:242
 #, php-format
 msgid "All books in series: %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:272
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:249
 #, php-format
 msgid "All books with tag: %1$s"
 msgstr ""
 
 #. TRANSLATORS: No more than 16 characters
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:299
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:269
 msgid "Search"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:300
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:270
 msgid "Search books"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/Controller/OpdsController.php:301
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:271
 msgid ""
 "Search books with matching titles, descriptions, authors, series, or tags."
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/FeedBuilder/OpdsFeedBuilder.php:76
+#: /home/alec/workspace/calibre_opds/lib/FeedBuilder/OpdsFeedBuilder.php:78
 #, php-format
 msgid "Authors: %1$d"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/lib/FeedBuilder/OpdsFeedBuilder.php:84
+#: /home/alec/workspace/calibre_opds/lib/FeedBuilder/OpdsFeedBuilder.php:86
 #, php-format
 msgid "Books: %1$d"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/specialAppInfoFakeDummyForL10nScript.php:2
+#: /home/alec/workspace/calibre_opds/specialAppInfoFakeDummyForL10nScript.php:2
 msgid "Calibre2OPDS"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/specialAppInfoFakeDummyForL10nScript.php:3
+#: /home/alec/workspace/calibre_opds/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "Simple OPDS server that uses Calibre database as a backend."
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/templates/settings.personal.php:3
+#: /home/alec/workspace/calibre_opds/templates/settings.personal.php:8
 msgid "Calibre OPDS library"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/templates/settings.personal.php:5
+#: /home/alec/workspace/calibre_opds/templates/settings.personal.php:10
 msgid "Publish your Calibre library in OPDS"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/templates/settings.personal.php:8
+#: /home/alec/workspace/calibre_opds/templates/settings.personal.php:13
 msgid "Library root folder:"
 msgstr ""
 
-#: /home/alec/workspace/calibre2opds-nextcloud/templates/settings.personal.php:14
+#: /home/alec/workspace/calibre_opds/templates/settings.personal.php:19
 msgid "Saved"
 msgstr ""

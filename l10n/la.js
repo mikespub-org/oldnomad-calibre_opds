@@ -1,7 +1,7 @@
 OC.L10N.register(
     "calibre_opds",
     {
-    "Nextcloud OPDS Library" : "Bibliotheca Nextcloud OPDS",
+    "Calibre OPDS Library" : "Bibliotheca Calibre OPDS",
     "Authors" : "Auctores",
     "All authors" : "Omnes auctores",
     "Publishers" : "Officinae typographicae",
@@ -24,11 +24,11 @@ OC.L10N.register(
     "All books with tag: %1$s" : "Omnes libri qui thema '%1$s' habent",
     "Search" : "Quaestio",
     "Search books" : "Quaestio in libros",
-    "Search books with matching titles, descriptions, authors, series, or tags." : "Quaere libros qui titulum, descriptionem, auctores, series, vel themata comparant",
+    "Search books with matching titles, descriptions, authors, series, or tags." : "Quaere libros qui titulum, descriptionem, auctores, series, vel themata comparant.",
     "Authors: %1$d" : "Auctores: %1$d",
     "Books: %1$d" : "Libri: %1$d",
     "Calibre2OPDS" : "Calibre2OPDS",
-    "Simple OPDS server that uses Calibre database as a backend." : "Simplex serviens OPDS qui Calibre data collecta ad originem utitur",
+    "Simple OPDS server that uses Calibre database as a backend." : "Simplex serviens OPDS qui Calibre data collecta ad originem utitur.",
     "Calibre OPDS library" : "Bibliotheca Calibre OPDS",
     "Publish your Calibre library in OPDS" : "Publica bibliothecam Calibre tuam ad OPDS",
     "Library root folder:" : "Categoria radicalis bibliothecae:",

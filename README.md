@@ -2,7 +2,7 @@
 SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
 SPDX-License-Identifier:  CC0-1.0
 -->
-# Nextcloud Calibre2OPDS app
+# Calibre2OPDS app
 
 The Calibre2OPDS app provides access to user's [Calibre](https://calibre-ebook.com/) library
 stored in Nextcloud via [OPDS](https://specs.opds.io/opds-1.2).

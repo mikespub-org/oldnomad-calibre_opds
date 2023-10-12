@@ -1,7 +1,7 @@
 OC.L10N.register(
     "calibre_opds",
     {
-    "Nextcloud OPDS Library" : "Библиотека Nextcloud OPDS",
+    "Calibre OPDS Library" : "Библиотека Calibre OPDS",
     "Authors" : "Авторы",
     "All authors" : "Все авторы",
     "Publishers" : "Издательства",

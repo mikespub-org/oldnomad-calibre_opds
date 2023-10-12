@@ -2,14 +2,20 @@ image: debian:bookworm-slim
 
 stages:
   - test
-  - deploy
+  - release
 
-before_script:
-  - apt-get update -yqq
-  - apt-get install -yqq git make composer librsvg2-bin netpbm php-xdebug php-sqlite3 php-curl php-xml php-mbstring php-json php-zip php-intl
+.prepare:
+  before_script:
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt-get update -yqq
+    - apt-get install -yqq git make composer curl sed librsvg2-bin netpbm php-xdebug php-sqlite3 php-curl php-xml php-mbstring php-json php-zip php-intl
+
+variables:
+  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_TAG}"
 
 test-job:
   stage: test
+  extends: .prepare
   script:
     - composer update
     - composer tests
@@ -22,17 +28,41 @@ test-job:
     when: on_success
     expire_in: 30 days
 
-deploy-job:
-  stage: deploy
-  only:
-    - tags
+build-job:
+  stage: release
+  extends: .prepare
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v[\d.]+/
   script:
     - composer update --no-dev
     - ./generate-icon.sh
     - make appstore
+    - ./generate-relinfo.sh
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file build/artifacts/appstore/calibre_opds.tar.gz "${PACKAGE_REGISTRY_URL}/calibre_opds.tar.gz"
   artifacts:
     paths:
       - build/artifacts/appstore/calibre_opds.tar.gz
+      - build/relinfo.md
     untracked: false
     when: on_success
     expire_in: 30 days
+
+release-job:
+  stage: release
+  needs:
+    - job: build-job
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v[\d.]+/
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - echo "Running the release job"
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: ./build/relinfo.md
+    assets:
+      links:
+        - name: App tarball
+          url: "${PACKAGE_REGISTRY_URL}/calibre_opds.tar.gz"
+          link_type: package

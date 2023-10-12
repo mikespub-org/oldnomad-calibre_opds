@@ -56,13 +56,17 @@
             "@phpunit"
         ],
         "translate:scan": "php ./vendor/nextcloud/translationtool/translationtool.phar create-pot-files",
-        "translate:generate": "php ./vendor/nextcloud/translationtool/translationtool.phar convert-po-files"
+        "translate:generate": "php ./vendor/nextcloud/translationtool/translationtool.phar convert-po-files",
+        "icon:rebuild": "./generate-icon.sh"
     },
     "scripts-descriptions": {
         "cs": "Checks that the code conforms to the coding standard.",
         "lint": "Runs unit tests.",
         "phpunit": "Run all unit tests.",
         "psalm": "Runs static analysis.",
-        "tests": "Runs all available tests."
+        "tests": "Runs all available tests.",
+        "translate:scan": "Generates POT file for translations.",
+        "translate:generate": "Generates translation files from PO files.",
+        "icon:rebuild": "Rebuilds app icon from SVG"
     }
 }

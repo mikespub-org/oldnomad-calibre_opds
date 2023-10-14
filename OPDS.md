@@ -45,11 +45,16 @@ following representation decisions were made:
 - All feeds are non-paginated. It is expected that a personal library saved in Nextcloud
   is not large enough for pagination to be necessary. However, pagination may be implemented
   at a later date.
-- Search terms in OpenSearch are interpreted as a case-insensitive
-  [PCRE](http://www.pcre.org/current/doc/html/pcre2pattern.html) pattern.
-  Matches are looked for in:
-  - Book title.
-  - Book description (Calibre comments).
-  - Book author names.
-  - Book series names.
-  - Book tags.
+
+## Search
+
+Search terms in OpenSearch are interpreted as a case-insensitive
+[PCRE](http://www.pcre.org/current/doc/html/pcre2pattern.html) pattern.
+
+Matches are looked for in:
+
+- Book title.
+- Book description (Calibre comments).
+- Book author names.
+- Book series names.
+- Book tags.

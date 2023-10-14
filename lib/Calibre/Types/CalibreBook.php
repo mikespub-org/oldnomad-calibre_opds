@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace OCA\Calibre2OPDS\Calibre\Types;
 
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
+use OCA\Calibre2OPDS\Calibre\CalibreSearch;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
 use OCA\Calibre2OPDS\Util\MapIterator;
 use OCP\Files\File;
@@ -100,28 +101,7 @@ class CalibreBook extends CalibreItem {
 		$filter = null;
 		switch ($criterion) {
 			case CalibreBookCriteria::SEARCH:
-				/* @var string */
-				$dataEsc = str_replace('/', '\/', $data);
-				$terms = '/'.$dataEsc.'/inS';
-				$filter = function (CalibreBook $item) use ($terms): bool {
-					$haystack = [ $item->title, $item->comment ?? '' ];
-					/** @var CalibreAuthor $author */
-					foreach ($item->authors as $author) {
-						array_push($haystack, $author->name);
-					}
-					/** @var CalibreSeries $series */
-					foreach ($item->series as $series) {
-						array_push($haystack, $series->name);
-					}
-					/** @var CalibreTag $tag */
-					foreach ($item->tags as $tag) {
-						array_push($haystack, $tag->name);
-					}
-					/** @psalm-suppress MixedArgumentTypeCoercion -- Psalm gets confused about type of $haystack */
-					$match = preg_grep($terms, $haystack);
-					/** @psalm-suppress RedundantConditionGivenDocblockType -- Psalm is mistaken about return type of preg_grep() */
-					return $match !== false && count($match) > 0;
-				};
+				$filter = CalibreSearch::searchBooks($data);
 				$params = [];
 				break;
 			case CalibreBookCriteria::AUTHOR:

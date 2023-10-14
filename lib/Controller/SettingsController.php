@@ -11,7 +11,6 @@ use OCP\AppFramework\Controller;
 use OCP\IRequest;
 use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
 use UnexpectedValueException;
 
 class SettingsController extends Controller {
@@ -26,7 +25,7 @@ class SettingsController extends Controller {
 		try {
 			$this->settings->setLibrary($libraryRoot);
 		} catch (PreConditionNotMetException|UnexpectedValueException $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
+			$this->logger->error('Exception in '.__FUNCTION__, [ 'exception' => $e ]);
 		}
 		return [
 			'libraryRoot' => $this->settings->getLibrary()

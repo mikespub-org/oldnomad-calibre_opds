@@ -32,7 +32,6 @@ use OCP\Files\Folder;
 use OCP\IL10N;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
 
 class OpdsController extends Controller {
 	private const DEFAULT_PREFIX_LENGTH = 1;
@@ -73,7 +72,7 @@ class OpdsController extends Controller {
 			$lib = $this->calibre->getDatabase($libPath);
 			return call_user_func($func, $libPath, $lib);
 		} catch (Exception $e) {
-			$this->logger->log(LogLevel::ERROR, 'Exception in '.__FUNCTION__, [ 'exception' => $e ]);
+			$this->logger->error('Exception in '.__FUNCTION__, [ 'exception' => $e ]);
 			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}

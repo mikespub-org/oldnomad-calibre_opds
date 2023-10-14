@@ -51,6 +51,15 @@ following representation decisions were made:
 Search terms in OpenSearch are interpreted as a
 [PCRE](http://www.pcre.org/current/doc/html/pcre2pattern.html) pattern.
 
+Both patterns and the values which are searched in are normalized to Unicode form
+[NFKC](https://www.unicode.org/reports/tr15/). This means that, for example,
+pattern `fi` will match ligature `ﬁ`, and vice versa.
+
+Search is case-insensitive, meaning that pattern `abc` will match `ABC`.
+
+Search is diacritics-agnostic, meaning that pattern `pate` matches both `pâté` and `patê`,
+however pattern `pâté` doesn't match `patê`.
+
 Matches are looked for in:
 
 - Book title.
@@ -58,8 +67,3 @@ Matches are looked for in:
 - Book author names.
 - Book series names.
 - Book tags.
-
-Patterns are:
-
-- Case-insensitive: pattern `abc` also matches `ABC` or `Abc`.
-- Diacritics-agnostic: pattern `pâté` matches `pâté`, but not `patê`; however, pattern `pate` matches both.

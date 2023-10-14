@@ -40,6 +40,13 @@ class CalibreAuthor extends CalibreItem {
 		parent::__construct($db, $data);
 	}
 
+	protected function mangle(ICalibreDB $db, array $data): array {
+		if ($data['uri'] === '') {
+			$data['uri'] = null;
+		}
+		return $data;
+	}
+
 	/**
 	 * Get authors, optionally filtered by a prefix applied to sort name.
 	 *

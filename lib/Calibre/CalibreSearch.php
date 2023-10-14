@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace OCA\Calibre2OPDS\Calibre;
 
+use Normalizer;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthor;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreBook;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreSeries;
@@ -16,21 +17,44 @@ use OCA\Calibre2OPDS\Calibre\Types\CalibreTag;
  */
 class CalibreSearch {
 	/**
-	 * Pattern to look for.
-	 *
-	 * @var non-empty-string
-	 */
-	private string $pattern;
-
-	/**
 	 * Construct an instance.
 	 *
-	 * @param string $terms search string.
+	 * @param non-empty-string $pattern search pattern to look for.
 	 */
-	private function __construct(string $terms) {
-		/* @var string */
-		$dataEsc = str_replace('/', '\/', $terms);
-		$this->pattern = '/'.$dataEsc.'/inS';
+	private function __construct(private string $pattern) {
+	}
+
+	/**
+	 * Remove diacritics from the text.
+	 *
+	 * @param string $text text to process.
+	 * @return string text without diacritics.
+	 */
+	private static function removeDiacritics(string $text): string {
+		$text = normalizer_normalize($text, Normalizer::NFD);
+		$text = preg_replace('/[\p{M}]/u', '', $text);
+		return normalizer_normalize($text, Normalizer::NFKC);
+	}
+
+	/**
+	 * Append a string to strings to search.
+	 *
+	 * This method performs all necessary transformations to guarantee search results.
+	 *
+	 * @param array<string> &$haystack array to add string to.
+	 * @param mixed $text text to add.
+	 */
+	private static function appendHaystack(array &$haystack, mixed $text): void {
+		if (!is_string($text) || $text === '') {
+			return;
+		}
+		$text = normalizer_normalize($text, Normalizer::NFKC);
+		array_push($haystack, $text);
+		$textNoMarks = self::removeDiacritics($text);
+		if ($textNoMarks !== $text) {
+			// Search with diacritics removed
+			array_push($haystack, $textNoMarks);
+		}
 	}
 
 	/**
@@ -40,23 +64,39 @@ class CalibreSearch {
 	 * @return bool `true` if the book passes, `false` otherwise.
 	 */
 	private function filterBook(CalibreBook $item): bool {
-		$haystack = [ $item->title, $item->comment ?? '' ];
+		$haystack = [];
+		self::appendHaystack($haystack, $item->title);
+		self::appendHaystack($haystack, $item->comment);
 		/** @var CalibreAuthor $author */
 		foreach ($item->authors as $author) {
-			array_push($haystack, $author->name);
+			self::appendHaystack($haystack, $author->name);
 		}
 		/** @var CalibreSeries $series */
 		foreach ($item->series as $series) {
-			array_push($haystack, $series->name);
+			self::appendHaystack($haystack, $series->name);
 		}
 		/** @var CalibreTag $tag */
 		foreach ($item->tags as $tag) {
-			array_push($haystack, $tag->name);
+			self::appendHaystack($haystack, $tag->name);
 		}
-		/** @psalm-suppress MixedArgumentTypeCoercion -- Psalm gets confused about type of $haystack */
 		$match = preg_grep($this->pattern, $haystack);
 		/** @psalm-suppress RedundantConditionGivenDocblockType -- Psalm is mistaken about return type of preg_grep() */
 		return $match !== false && count($match) > 0;
+	}
+
+	/**
+	 * Create a pattern from search string.
+	 *
+	 * @param string $terms search string.
+	 * @return non-empty-string|null search pattern, or `null` if not created.
+	 */
+	private static function createPattern(string $terms): ?string {
+		if ($terms === '') {
+			return null;
+		}
+		/* @var string */
+		$dataEsc = str_replace('/', '\/', $terms);
+		return '/'.$dataEsc.'/inS';
 	}
 
 	/**
@@ -66,10 +106,11 @@ class CalibreSearch {
 	 * @return callable(CalibreBook):bool|null callable filter for books, or `null` to skip checks.
 	 */
 	public static function searchBooks(string $terms): ?callable {
-		if ($terms === '') {
+		$pattern = self::createPattern($terms);
+		if (is_null($pattern)) {
 			return null;
 		}
-		$obj = new self($terms);
+		$obj = new self($pattern);
 		return $obj->filterBook(...);
 	}
 }

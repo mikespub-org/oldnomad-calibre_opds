@@ -48,7 +48,7 @@ following representation decisions were made:
 
 ## Search
 
-Search terms in OpenSearch are interpreted as a case-insensitive
+Search terms in OpenSearch are interpreted as a
 [PCRE](http://www.pcre.org/current/doc/html/pcre2pattern.html) pattern.
 
 Matches are looked for in:
@@ -58,3 +58,8 @@ Matches are looked for in:
 - Book author names.
 - Book series names.
 - Book tags.
+
+Patterns are:
+
+- Case-insensitive: pattern `abc` also matches `ABC` or `Abc`.
+- Diacritics-agnostic: pattern `pâté` matches `pâté`, but not `patê`; however, pattern `pate` matches both.

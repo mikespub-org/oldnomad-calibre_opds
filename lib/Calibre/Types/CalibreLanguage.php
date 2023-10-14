@@ -8,7 +8,7 @@ namespace OCA\Calibre2OPDS\Calibre\Types;
 
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
-use OCA\Calibre2OPDS\Util\MapIterator;
+use OCA\Calibre2OPDS\Util\MapAggregate;
 use PDOException;
 use Traversable;
 
@@ -53,7 +53,7 @@ class CalibreLanguage extends CalibreItem {
 	 * @throws PDOException on error.
 	 */
 	public static function getAll(ICalibreDB $db): Traversable {
-		return new MapIterator(
+		return new MapAggregate(
 			$db->query(sprintf(self::SQL_LANGUAGES, '')),
 			fn (array $row) => new self($db, $row)
 		);
@@ -69,7 +69,7 @@ class CalibreLanguage extends CalibreItem {
 	 * @throws PDOException on error.
 	 */
 	public static function getByBook(ICalibreDB $db, $book_id): Traversable {
-		return new MapIterator(
+		return new MapAggregate(
 			$db->query(sprintf(self::SQL_LANGUAGES, 'where bll.book = ?'), [$book_id]),
 			fn (array $row) => new self($db, $row)
 		);

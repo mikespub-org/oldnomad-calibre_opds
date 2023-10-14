@@ -8,7 +8,7 @@ namespace OCA\Calibre2OPDS\Calibre\Types;
 
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
-use OCA\Calibre2OPDS\Util\MapIterator;
+use OCA\Calibre2OPDS\Util\MapAggregate;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
@@ -69,7 +69,7 @@ class CalibreBookFormat extends CalibreItem {
 	 * @throws PDOException on error.
 	 */
 	public static function getByBook(ICalibreDB $db, $book_id): Traversable {
-		return new MapIterator(
+		return new MapAggregate(
 			$db->query(sprintf(self::SQL_BOOK_DATA, 'where books.id = ?'), [$book_id]),
 			fn (array $row) => new self($db, $row)
 		);

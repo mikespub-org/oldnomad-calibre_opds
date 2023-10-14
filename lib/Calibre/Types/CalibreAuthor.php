@@ -8,7 +8,7 @@ namespace OCA\Calibre2OPDS\Calibre\Types;
 
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
-use OCA\Calibre2OPDS\Util\MapIterator;
+use OCA\Calibre2OPDS\Util\MapAggregate;
 use PDOException;
 use Traversable;
 
@@ -54,7 +54,7 @@ class CalibreAuthor extends CalibreItem {
 		if ($prefix !== '') {
 			$where = 'where SUBSTR(authors.sort, 1, LENGTH(param)) = param';
 		}
-		return new MapIterator(
+		return new MapAggregate(
 			$db->query(sprintf(self::SQL_AUTHORS, $where), [$prefix]),
 			fn (array $row) => new self($db, $row)
 		);
@@ -70,7 +70,7 @@ class CalibreAuthor extends CalibreItem {
 	 * @throws PDOException on error.
 	 */
 	public static function getByBook(ICalibreDB $db, $book_id): Traversable {
-		return new MapIterator(
+		return new MapAggregate(
 			$db->query(sprintf(self::SQL_AUTHORS, 'where bal.book = param'), [$book_id]),
 			fn (array $row) => new self($db, $row)
 		);

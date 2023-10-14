@@ -8,7 +8,7 @@ namespace OCA\Calibre2OPDS\Calibre\Types;
 
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
-use OCA\Calibre2OPDS\Util\MapIterator;
+use OCA\Calibre2OPDS\Util\MapAggregate;
 use PDOException;
 use Traversable;
 
@@ -53,7 +53,7 @@ class CalibreAuthorPrefix extends CalibreItem {
 	 * @throws PDOException on error.
 	 */
 	public static function getAll(ICalibreDB $db, int $length = 1): Traversable {
-		return new MapIterator(
+		return new MapAggregate(
 			$db->query(self::SQL_AUTHOR_PREFIXES, [$length]),
 			fn (array $row) => new self($db, $row)
 		);

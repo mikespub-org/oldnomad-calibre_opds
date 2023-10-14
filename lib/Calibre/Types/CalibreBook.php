@@ -9,7 +9,7 @@ namespace OCA\Calibre2OPDS\Calibre\Types;
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
 use OCA\Calibre2OPDS\Calibre\CalibreSearch;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
-use OCA\Calibre2OPDS\Util\MapIterator;
+use OCA\Calibre2OPDS\Util\MapAggregate;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
@@ -129,7 +129,7 @@ class CalibreBook extends CalibreItem {
 				$params = [];
 				break;
 		}
-		return new MapIterator(
+		return new MapAggregate(
 			$db->query(sprintf(self::SQL_BOOKS, $join, $where, $sort), $params),
 			fn (array $row) => new self($db, $row),
 			$filter

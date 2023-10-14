@@ -53,6 +53,16 @@ class SearchTest extends TestCase {
 			...self::BOOK_DEFAULTS,
 			'title' => 'This is a Símple Tést',
 		])), 'Simple search in title -- diacritics-insensitive');
+		$filter = CalibreSearch::searchBooks(normalizer_normalize('símple', Normalizer::NFC));
+		$this->assertTrue(call_user_func($filter, $this->createCalibreItem(CalibreBook::class, $this->db, [
+			...self::BOOK_DEFAULTS,
+			'title' => 'This is a Símple Tést',
+		])), 'Simple search in title -- diacritics-insensitive (NFC)');
+		$filter = CalibreSearch::searchBooks(normalizer_normalize('símple', Normalizer::NFD));
+		$this->assertTrue(call_user_func($filter, $this->createCalibreItem(CalibreBook::class, $this->db, [
+			...self::BOOK_DEFAULTS,
+			'title' => 'This is a Símple Tést',
+		])), 'Simple search in title -- diacritics-insensitive (NFD)');
 	}
 
 	public function testRegex(): void {

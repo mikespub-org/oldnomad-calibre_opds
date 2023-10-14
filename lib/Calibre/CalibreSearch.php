@@ -17,6 +17,11 @@ use OCA\Calibre2OPDS\Calibre\Types\CalibreTag;
  */
 class CalibreSearch {
 	/**
+	 * Default Unicode form used for search.
+	 */
+	private const DEFAULT_FORM = Normalizer::NFKC;
+
+	/**
 	 * Construct an instance.
 	 *
 	 * @param non-empty-string $pattern search pattern to look for.
@@ -33,7 +38,7 @@ class CalibreSearch {
 	private static function removeDiacritics(string $text): string {
 		$text = normalizer_normalize($text, Normalizer::NFD);
 		$text = preg_replace('/[\p{M}]/u', '', $text);
-		return normalizer_normalize($text, Normalizer::NFKC);
+		return normalizer_normalize($text, self::DEFAULT_FORM);
 	}
 
 	/**
@@ -48,7 +53,7 @@ class CalibreSearch {
 		if (!is_string($text) || $text === '') {
 			return;
 		}
-		$text = normalizer_normalize($text, Normalizer::NFKC);
+		$text = normalizer_normalize($text, self::DEFAULT_FORM);
 		array_push($haystack, $text);
 		$textNoMarks = self::removeDiacritics($text);
 		if ($textNoMarks !== $text) {
@@ -94,9 +99,8 @@ class CalibreSearch {
 		if ($terms === '') {
 			return null;
 		}
-		/* @var string */
 		$dataEsc = str_replace('/', '\/', $terms);
-		return '/'.$dataEsc.'/inS';
+		return '/'.normalizer_normalize($dataEsc, self::DEFAULT_FORM).'/inS';
 	}
 
 	/**

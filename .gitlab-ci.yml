@@ -4,7 +4,8 @@ stages:
   - test
   - release
 
-.prepare:
+# Debian preparation: install utilities and PHP modules needed for building the project
+.debian-build:
   before_script:
     - export DEBIAN_FRONTEND=noninteractive
     - apt-get update -yqq
@@ -13,9 +14,11 @@ stages:
 variables:
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_TAG}"
 
+# Test job: run all tests defined in Composer
+# Exports Cobertura coverage report
 test-job:
   stage: test
-  extends: .prepare
+  extends: .debian-build
   script:
     - composer update
     - composer tests
@@ -28,9 +31,12 @@ test-job:
     when: on_success
     expire_in: 30 days
 
+# Build job: build application package and release info, publish it in generic package registry
+# This runs only on version tags
+# Exports application package and release changes summary
 build-job:
   stage: release
-  extends: .prepare
+  extends: .debian-build
   rules:
     - if: $CI_COMMIT_TAG =~ /^v[\d.]+/
   script:
@@ -48,6 +54,8 @@ build-job:
     when: on_success
     expire_in: 30 days
 
+# Release job: publish a GitLab release
+# This runs only on version tags
 release-job:
   stage: release
   needs:
@@ -66,3 +74,21 @@ release-job:
         - name: App tarball
           url: "${PACKAGE_REGISTRY_URL}/calibre_opds.tar.gz"
           link_type: package
+
+# Release mirror job: publish a GitHub release
+# This runs only on version tags -- disabled for now, since GitLab doesn't have secrets storage
+# Needs variables: GH_TOKEN (GitHub API token), GH_REPO (GitHub repository name)
+#release-mirror-job:
+#  stage: release
+#  needs:
+#    - job: build-job
+#      artifacts: true
+#  rules:
+#    - if: $CI_COMMIT_TAG =~ /^v[\d.]+/
+#  before_script:
+#    - export DEBIAN_FRONTEND=noninteractive
+#    - apt-get update -yqq
+#    - apt-get install -yqq gh ca-certificates
+#  script:
+#    - |
+#      gh release create ci-test -t "ci-test" -F ./build/relinfo.md "./build/artifacts/appstore/calibre_opds.tar.gz#App tarball" -R "$GH_REPO"

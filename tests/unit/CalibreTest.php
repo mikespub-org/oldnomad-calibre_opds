@@ -34,8 +34,12 @@ class CalibreTest extends TestCase {
 			$this->createFileNode('metadata.db'),
 			$this->createFolderNode('dummies_cicero', [
 				$this->createFileNode('cover.jpg'),
-				$this->createFileNode('cicero_for_dummies.epub')
-			])
+				$this->createFileNode('cicero_for_dummies.epub'),
+				$this->createFileNode('cicero_for_dummies.fb2', false),
+			]),
+			$this->createFolderNode('whores_eroticon6', [
+				$this->createFileNode('cover.jpg', false),
+			]),
 		]);
 
 		/** @var CalibreDB */
@@ -238,14 +242,27 @@ class CalibreTest extends TestCase {
 			],
 			'formats' => [
 				[ 'format' => 'EPUB', 'name' => 'cicero_for_dummies', 'path' => 'dummies_cicero' ],
+				[ 'format' => 'FB2', 'name' => 'cicero_for_dummies', 'path' => 'dummies_cicero' ],
 			],
 			'identifiers' => [
 				[ 'type' => 'isbn', 'value' => '978-0140440997' ],
 			],
 		], $book, 'Book by id');
+	}
+
+	public function testBookCover(): void {
+		$book = CalibreBook::getById($this->db, 12);
 		$coverFile = $book->getCoverFile($this->root);
 		$this->assertInstanceOf(File::class, $coverFile, 'Book cover file -- class');
 		$this->assertEquals('/./dummies_cicero/cover.jpg', $coverFile->getInternalPath(), 'Book cover file -- path');
+
+		$book = CalibreBook::getById($this->db, 11);
+		$coverFile = $book->getCoverFile($this->root);
+		$this->assertNull($coverFile, 'Book cover file -- no cover');
+
+		$book = CalibreBook::getById($this->db, 13);
+		$coverFile = $book->getCoverFile($this->root);
+		$this->assertNull($coverFile, 'Book cover file -- unreadable');
 	}
 
 	public function testBookData(): void {
@@ -256,6 +273,10 @@ class CalibreTest extends TestCase {
 		$dataFile = $format->getDataFile($this->root);
 		$this->assertInstanceOf(File::class, $dataFile, 'Book data file -- class');
 		$this->assertEquals('/./dummies_cicero/cicero_for_dummies.epub', $dataFile->getInternalPath(), 'Book data file -- path');
+
+		$format = CalibreBookFormat::getByBookAndType($this->db, 12, 'fb2');
+		$dataFile = $format->getDataFile($this->root);
+		$this->assertNull($dataFile, 'Book data file -- unreadable');
 	}
 
 	public function testBooksAll(): void {

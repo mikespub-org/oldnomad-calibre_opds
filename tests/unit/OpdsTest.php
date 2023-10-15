@@ -104,7 +104,9 @@ class OpdsTest extends TestCase {
 		$app = new OpdsApp(self::APP_ID, self::APP_NAME, self::APP_VERSION, self::APP_WEBSITE);
 		$this->assertEquals(self::APP_ID, $app->getAppId(), 'App ID');
 		$opds = new OpdsResponse($app, self::RESPONSE_ID, self::RESPONSE_TITLE, self::RESPONSE_ICON_URL);
-		$opds->setUpdated(new DateTimeImmutable(self::RESPONSE_UPDATED));
+		$updated = new DateTimeImmutable(self::RESPONSE_UPDATED);
+		$opds->setUpdated($updated);
+		$this->assertEquals($updated, $opds->getUpdated(), 'Updated timestamp');
 		$opds->addLink(new OpdsLink(self::LINK_REL, self::LINK_URL, self::LINK_TYPE));
 		foreach (self::ENTRIES as $attr) {
 			$entry = new OpdsEntry($attr[0], $attr[1], $attr[2] ?? null);

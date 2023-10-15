@@ -1,3 +1,5 @@
+-- SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
+-- SPDX-License-Identifier: CC0-1.0
 BEGIN TRANSACTION;
 
 INSERT INTO books (id, title, pubdate, path, has_cover, series_index, timestamp, last_modified) VALUES
@@ -10,7 +12,8 @@ INSERT INTO comments (id, book, text) VALUES
 INSERT INTO identifiers (id, book, type, val) VALUES
 	(31, 12, 'isbn', '978-0140440997');
 INSERT INTO data (id, book, format, uncompressed_size, name) VALUES
-	(41, 12, 'EPUB', 123456, 'cicero_for_dummies');
+	(41, 12, 'EPUB', 123456, 'cicero_for_dummies'),
+	(42, 12, 'FB2',  456789, 'cicero_for_dummies');
 
 INSERT INTO authors (id, name, sort, link) VALUES
 	(51, 'Aaron Zeroth',       'Zeroth, Aaron',        ''),
@@ -48,9 +51,9 @@ INSERT INTO books_series_link (id, book, series) VALUES
 	(122, 12, 111),
 	(123, 14, 111);
 
-INSERT INTO tags (id, name, link) VALUES
-	(131, 'Political theory', 'http://example.com/politics'),
-	(132, 'Translations',     '');
+INSERT INTO tags (id, name) VALUES
+	(131, 'Political theory'),
+	(132, 'Translations');
 INSERT INTO books_tags_link (id, book, tag) VALUES
 	(141, 11, 131),
 	(142, 12, 131),

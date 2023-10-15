@@ -50,10 +50,6 @@ class CachedIterator implements Iterator {
 		}
 	}
 
-	public function isInitialPass(): bool {
-		return $this->initialPass;
-	}
-
 	/**
 	 * @return TValue
 	 */

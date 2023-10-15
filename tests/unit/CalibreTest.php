@@ -71,15 +71,17 @@ class CalibreTest extends TestCase {
 
 	private function checkData(array $expected, Traversable $actual, string $message): void {
 		reset($expected);
+		$count = 0;
 		foreach ($actual as $actualItem) {
 			$this->assertInstanceOf(CalibreItem::class, $actualItem, $message.' -- wrong type');
 			$key = key($expected);
 			$expectedItem = current($expected);
-			$this->assertFalse($expectedItem === false, $message.' -- result too long');
+			$this->assertFalse($expectedItem === false, $message.' -- result too long, checked '.$count.", expected ".count($expected));
 			$this->checkDataItem($expectedItem, $actualItem, $message.' -- key '.$key);
 			next($expected);
+			++$count;
 		}
-		$this->assertTrue(current($expected) === false, $message.' -- result too short');
+		$this->assertTrue(current($expected) === false, $message.' -- result too short, checked '.$count.", expected ".count($expected));
 	}
 
 	public function testAuthorsAll(): void {

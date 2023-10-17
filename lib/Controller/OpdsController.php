@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace OCA\Calibre2OPDS\Controller;
 
 use Exception;
+use OCA\Calibre2OPDS\Calibre\CalibreItem;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthor;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthorPrefix;
@@ -201,51 +202,51 @@ class OpdsController extends Controller {
 			$title = $this->l->t('All books');
 			$upRoute = null;
 			$upParams = [];
+			$refItem = null;
+			$refName = $id;
 			$critCase = CalibreBookCriteria::tryFrom($criterion);
+			if (!is_null($critCase) && !is_null($critClass = $critCase->getDataClass())) {
+				/**
+				 * @psalm-suppress UndefinedMethod -- this is a static method defined in subclasses
+				 * @var ?CalibreItem
+				 */
+				$refItem = $critClass::getById($lib, $id);
+				if (is_null($refItem)) {
+					return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
+				}
+				if ($critCase === CalibreBookCriteria::LANGUAGE) {
+					/** @var string $refItem->code */
+					$refName = $this->settings->getLanguageName($refItem->code);
+				} else {
+					/** @var string $refItem->name */
+					$refName = $refItem->name;
+				}
+			}
 			switch ($critCase) {
-				case 'search':
-					$title = $this->l->t('All books matching: /%1$s/', [$id]);
+				case CalibreBookCriteria::SEARCH:
+					$title = $this->l->t('All books matching: /%1$s/', [$refName]);
 					break;
-				case 'author':
-					$author = CalibreAuthor::getById($lib, $id);
-					if (is_null($author)) {
-						return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-					}
-					$title = $this->l->t('All books by author: %1$s', [$author->name]);
+				case CalibreBookCriteria::AUTHOR:
+					$title = $this->l->t('All books by author: %1$s', [$refName]);
 					$upRoute = 'authors';
-					/** @var string $author->sort */
-					$upParams = [ 'prefix' => substr($author->sort, 0, intval(self::DEFAULT_PREFIX_LENGTH)) ];
+					/** @var string $refItem->sort */
+					$upParams = [ 'prefix' => substr($refItem->sort, 0, intval(self::DEFAULT_PREFIX_LENGTH)) ];
 					break;
-				case 'publisher':
-					$publisher = CalibrePublisher::getById($lib, $id);
-					if (is_null($publisher)) {
-						return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-					}
-					$title = $this->l->t('All books by publisher: %1$s', [$publisher->name]);
+				case CalibreBookCriteria::PUBLISHER:
+					$title = $this->l->t('All books by publisher: %1$s', [$refName]);
 					$upRoute = 'publishers';
 					break;
-				case 'language':
-					$language = CalibreLanguage::getById($lib, $id);
-					if (is_null($language)) {
-						return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-					}
-					/** @var string $language->code */
-					$language->setName($this->settings->getLanguageName($language->code));
-					$title = $this->l->t('All books in language: %1$s', [$language->name]);
+				case CalibreBookCriteria::LANGUAGE:
+					$title = $this->l->t('All books in language: %1$s', [$refName]);
+					$upRoute = 'languages';
 					break;
-				case 'series':
-					$series = CalibreSeries::getById($lib, $id);
-					if (is_null($series)) {
-						return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-					}
-					$title = $this->l->t('All books in series: %1$s', [$series->name]);
+				case CalibreBookCriteria::SERIES:
+					$title = $this->l->t('All books in series: %1$s', [$refName]);
+					$upRoute = 'series';
 					break;
-				case 'tag':
-					$tag = CalibreTag::getById($lib, $id);
-					if (is_null($tag)) {
-						return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
-					}
-					$title = $this->l->t('All books with tag: %1$s', [$tag->name]);
+				case CalibreBookCriteria::TAG:
+					$title = $this->l->t('All books with tag: %1$s', [$refName]);
+					$upRoute = 'tags';
 					break;
 			}
 			$builder = $this->feed->createBuilder('books', $this->request->getParams(), $title, $upRoute, $upParams);

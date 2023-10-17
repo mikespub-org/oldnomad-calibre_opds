@@ -375,4 +375,21 @@ class CalibreTest extends TestCase {
 		$this->expectExceptionMessageMatches('/Getting unknown property nonexistent_field from object of class .*/');
 		$test = $author->nonexistent_field;
 	}
+
+	public static function criteriaDataProvider(): array {
+		return [
+			[ CalibreAuthor::class ],
+			[ CalibrePublisher::class ],
+			[ CalibreLanguage::class ],
+			[ CalibreSeries::class ],
+			[ CalibreTag::class ],
+		];
+	}
+
+	#[DataProvider('criteriaDataProvider')]
+	public function testBookCriteria($critClass): void {
+		$critCase = $critClass::CRITERION;
+		$this->assertNotNull($critCase, 'Search criterion for class '.$critClass.' null check');
+		$this->assertEquals($critClass, $critCase->getDataClass(), 'Search criterion for class '.$critClass.' back reference');
+	}
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 // SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+use OCA\Calibre2OPDS\Util\CachedIterator;
 use OCA\Calibre2OPDS\Util\MapAggregate;
 use OCA\Calibre2OPDS\Util\MimeTypes;
 use PHPUnit\Framework\TestCase;
@@ -12,6 +13,21 @@ final class UtilTest extends TestCase {
 	public function testMimeTypes() {
 		$this->assertEquals('application/x-ms-reader', MimeTypes::getMimeType('LIT'));
 		$this->assertEquals('application/octet-stream', MimeTypes::getMimeType('XXX'));
+	}
+
+	public function testCachedIterator() {
+		$sample = new CachedIterator(new NoRewindIterator(SplFixedArray::fromArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])->getIterator()));
+		$this->assertTrue($sample->valid(), "Cached iterator -- first element validity");
+		$this->assertEquals(0, $sample->current(), "Cached iterator -- first element");
+		$sample->next();
+		$this->assertTrue($sample->valid(), "Cached iterator -- second element validity");
+		$this->assertEquals(1, $sample->current(), "Cached iterator -- second element");
+		$sample->rewind();
+		$test = iterator_to_array($sample);
+		$this->assertEquals([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], $test, "Cached iterator -- after rewind");
+		$sample->rewind();
+		$test = iterator_to_array($sample);
+		$this->assertEquals([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], $test, "Cached iterator -- after second rewind");
 	}
 
 	public function testMapIterator() {

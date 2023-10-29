@@ -4,7 +4,7 @@
     <id>calibre_opds</id>
     <name>Calibre2OPDS</name>
     <description><![CDATA[Simple OPDS server that uses Calibre database as a backend.]]></description>
-    <version>0.0.1</version>
+    <version>0.0.3</version>
     <licence>agpl</licence>
     <author mail="alec@kojaev.name">Alec Kojaev</author>
     <namespace>Calibre2OPDS</namespace>

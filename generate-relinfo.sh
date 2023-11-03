@@ -1,5 +1,8 @@
 #!/bin/sh
 #
+# SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
+# SPDX-License-Identifier:  CC0-1.0
+#
 # This script needs `sed`.
 #
 set -e

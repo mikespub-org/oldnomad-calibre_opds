@@ -35,8 +35,8 @@ final class MimeTypes {
 			if (strlen($line) == 0 || $line[0] === '#') {
 				continue;
 			}
-			$parts = preg_split('/\s+/', $line);
-			if ($parts === false) {
+			$parts = preg_split('/\s+/', $line, -1, PREG_SPLIT_NO_EMPTY);
+			if ($parts === false || count($parts) < 2) {
 				continue;
 			}
 			$type = array_shift($parts);

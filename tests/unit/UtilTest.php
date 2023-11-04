@@ -11,6 +11,8 @@ use PHPUnit\Framework\TestCase;
 
 final class UtilTest extends TestCase {
 	public function testMimeTypes() {
+		$this->assertFalse(MimeTypes::loadMimeTypes(__DIR__.'/../files/nonexistent.types'));
+		$this->assertTrue(MimeTypes::loadMimeTypes(__DIR__.'/../files/broken.types'));
 		$this->assertEquals('application/x-ms-reader', MimeTypes::getMimeType('LIT'));
 		$this->assertEquals('application/octet-stream', MimeTypes::getMimeType('XXX'));
 	}

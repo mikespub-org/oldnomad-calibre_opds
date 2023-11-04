@@ -300,4 +300,16 @@ class OpdsFeedTest extends TestCase {
 		}
 		$this->assertEmpty($expectedEntries, 'Feed -- not enough entries');
 	}
+
+	public function testOpdsFeedException(): void {
+		$builder = new OpdsFeedBuilder($this->settings, $this->l,
+			self::SELF_ROUTE, self::SELF_PARAMS, self::FEED_TITLE,
+			self::UP_ROUTE, self::UP_PARAMS
+		);
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessageMatches('/^invalid navigation item call with class '.preg_quote(CalibreBookId::class).'$/');
+		$builder->addNavigationEntry($this->createCalibreItem(CalibreBookId::class, $this->db, [
+			'type' => 'uri', 'value' => 'id-uri'
+		]));
+	}
 }

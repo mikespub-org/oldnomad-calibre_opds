@@ -364,7 +364,7 @@ class CalibreTest extends TestCase {
 		$this->checkData($expected, $books, 'Books search ('.$type.')');
 	}
 
-	public function testUnknownProperty(): void {
+	public function testUnknownPropertyError(): void {
 		$author = CalibreAuthor::getById($this->db, 53);
 		// NOTE: PHPUnit 10 no longer supports expecting errors.
 		set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {
@@ -374,6 +374,22 @@ class CalibreTest extends TestCase {
 		$this->expectException(ErrorException::class);
 		$this->expectExceptionMessageMatches('/Getting unknown property nonexistent_field from object of class .*/');
 		$test = $author->nonexistent_field;
+	}
+
+	public function testUnknownPropertyIsNull(): void {
+		$author = CalibreAuthor::getById($this->db, 53);
+		// NOTE: PHPUnit 10 no longer supports expecting errors.
+		set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {
+			restore_error_handler();
+			return true;
+		}, E_USER_ERROR);
+		$this->assertNull($author->nonexistent_field, 'Unknown property is null');
+	}
+
+	public function testPropertyIsSet(): void {
+		$author = CalibreAuthor::getById($this->db, 53);
+		$this->assertTrue(isset($author->id), 'Known property is set');
+		$this->assertFalse(isset($author->nonexistent_field), 'Unknown property is unset');
 	}
 
 	public static function criteriaDataProvider(): array {

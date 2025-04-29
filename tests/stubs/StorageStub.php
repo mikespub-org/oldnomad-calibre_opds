@@ -20,7 +20,7 @@ trait StorageStub {
 	protected function initStorage(string $path, bool $fake = false): void {
 		$storage = $this->createStub(IStorage::class);
 		$storage->method('getLocalFile')->willReturnCallback(
-			fn (string $filePath): string => $fake ? $path : ($path.'/'.$filePath)
+			fn (string $filePath): string => $fake ? $path : ($path . '/' . $filePath)
 		);
 		$this->storage = $storage;
 	}
@@ -32,7 +32,7 @@ trait StorageStub {
 		$node->method('getName')->willReturn($name);
 		$node->method('getInternalPath')->willReturnCallback(function () use ($node) {
 			$parent = $node->getParent();
-			return (is_null($parent) ? '' : $parent->getInternalPath()).'/'.$node->getName();
+			return (is_null($parent) ? '' : $parent->getInternalPath()) . '/' . $node->getName();
 		});
 		$node->method('getStorage')->willReturn($this->storage);
 		return $node;
@@ -62,13 +62,13 @@ trait StorageStub {
 						try {
 							return $sub->get($parts[1]);
 						} catch (NotFoundException $e) {
-							throw new NotFoundException('not found: '.$path, 0, $e);
+							throw new NotFoundException('not found: ' . $path, 0, $e);
 						}
 					}
 					return $sub;
 				}
 			}
-			throw new NotFoundException('not found: '.$path);
+			throw new NotFoundException('not found: ' . $path);
 		});
 		return $dir;
 	}

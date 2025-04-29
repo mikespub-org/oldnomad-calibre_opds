@@ -42,7 +42,7 @@ class CalibreDB implements ICalibreDB {
 		if ($readOnly) {
 			$attr[PDO::SQLITE_ATTR_OPEN_FLAGS] = PDO::SQLITE_OPEN_READONLY;
 		}
-		$this->database = new PDO('sqlite:'.$dsn, null, null, $attr);
+		$this->database = new PDO('sqlite:' . $dsn, null, null, $attr);
 		if (!$readOnly) {
 			// Following functions are used by some triggers
 			/** @psalm-suppress TooManyArguments -- Psalm is mistaken about PDO::sqliteCreateFunction() (has 4 args since 7.1.4) */

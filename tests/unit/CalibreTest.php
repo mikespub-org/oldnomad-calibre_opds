@@ -46,20 +46,20 @@ class CalibreTest extends TestCase {
 		$this->db = CalibreDB::fromFolder($this->root, false);
 		$pdo = $this->db->getDatabase();
 
-		$ddl = file_get_contents(__DIR__.'/../files/metadata.sql');
+		$ddl = file_get_contents(__DIR__ . '/../files/metadata.sql');
 		$pdo->exec($ddl);
-		$ddl = file_get_contents(__DIR__.'/../files/test-data.sql');
+		$ddl = file_get_contents(__DIR__ . '/../files/test-data.sql');
 		$pdo->exec($ddl);
 	}
 
 	private function checkDataItem(?array $expected, ?CalibreItem $actual, string $message): void {
 		if (is_null($expected)) {
-			$this->assertNull($actual, $message.' -- null check');
+			$this->assertNull($actual, $message . ' -- null check');
 			return;
 		}
-		$this->assertNotNull($actual, $message.' -- null check');
+		$this->assertNotNull($actual, $message . ' -- null check');
 		foreach ($expected as $key => $expectedValue) {
-			$msg = $message.' -- key '.$key;
+			$msg = $message . ' -- key ' . $key;
 			$actualValue = $actual->$key;
 			if (is_array($expectedValue)) {
 				$this->checkData($expectedValue, $actualValue, $msg);
@@ -77,15 +77,15 @@ class CalibreTest extends TestCase {
 		reset($expected);
 		$count = 0;
 		foreach ($actual as $actualItem) {
-			$this->assertInstanceOf(CalibreItem::class, $actualItem, $message.' -- wrong type');
+			$this->assertInstanceOf(CalibreItem::class, $actualItem, $message . ' -- wrong type');
 			$key = key($expected);
 			$expectedItem = current($expected);
-			$this->assertFalse($expectedItem === false, $message.' -- result too long, checked '.$count.", expected ".count($expected));
-			$this->checkDataItem($expectedItem, $actualItem, $message.' -- key '.$key);
+			$this->assertFalse($expectedItem === false, $message . ' -- result too long, checked ' . $count . ', expected ' . count($expected));
+			$this->checkDataItem($expectedItem, $actualItem, $message . ' -- key ' . $key);
 			next($expected);
 			++$count;
 		}
-		$this->assertTrue(current($expected) === false, $message.' -- result too short, checked '.$count.", expected ".count($expected));
+		$this->assertTrue(current($expected) === false, $message . ' -- result too short, checked ' . $count . ', expected ' . count($expected));
 	}
 
 	public function testAuthorsAll(): void {
@@ -333,7 +333,7 @@ class CalibreTest extends TestCase {
 	#[DataProvider('selectDataProvider')]
 	public function testBooksSelect(CalibreBookCriteria $criterion, string $id, array $expected, string $type): void {
 		$books = CalibreBook::getByCriterion($this->db, $criterion, $id);
-		$this->checkData($expected, $books, 'Books by '.$type);
+		$this->checkData($expected, $books, 'Books by ' . $type);
 	}
 
 	public static function searchDataProvider(): array {
@@ -361,7 +361,7 @@ class CalibreTest extends TestCase {
 	#[DataProvider('searchDataProvider')]
 	public function testBooksSearch(CalibreBookCriteria $criterion, string $term, array $expected, string $type): void {
 		$books = CalibreBook::getByCriterion($this->db, $criterion, $term);
-		$this->checkData($expected, $books, 'Books search ('.$type.')');
+		$this->checkData($expected, $books, 'Books search (' . $type . ')');
 	}
 
 	public function testUnknownPropertyError(): void {
@@ -405,7 +405,7 @@ class CalibreTest extends TestCase {
 	#[DataProvider('criteriaDataProvider')]
 	public function testBookCriteria($critClass): void {
 		$critCase = $critClass::CRITERION;
-		$this->assertNotNull($critCase, 'Search criterion for class '.$critClass.' null check');
-		$this->assertEquals($critClass, $critCase->getDataClass(), 'Search criterion for class '.$critClass.' back reference');
+		$this->assertNotNull($critCase, 'Search criterion for class ' . $critClass . ' null check');
+		$this->assertEquals($critClass, $critCase->getDataClass(), 'Search criterion for class ' . $critClass . ' back reference');
 	}
 }

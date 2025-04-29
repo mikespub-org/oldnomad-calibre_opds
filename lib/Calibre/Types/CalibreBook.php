@@ -108,7 +108,7 @@ class CalibreBook extends CalibreItem {
 			return null;
 		}
 		/** @var string $this->path */
-		$filename = $this->path.'/cover.jpg';
+		$filename = $this->path . '/cover.jpg';
 		$data = $root->get($filename);
 		if (!$data->isReadable() || $data->getType() !== FileInfo::TYPE_FILE || !($data instanceof File)) {
 			return null;

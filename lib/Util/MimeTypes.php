@@ -24,7 +24,7 @@ final class MimeTypes {
 	 *
 	 * @return bool `true` on success, `false` on error.
 	 */
-	public static function loadMimeTypes(string $filename = __DIR__.'/mime.types'): bool {
+	public static function loadMimeTypes(string $filename = __DIR__ . '/mime.types'): bool {
 		$list = [];
 		$lines = @file($filename, FILE_IGNORE_NEW_LINES);
 		if ($lines === false) {

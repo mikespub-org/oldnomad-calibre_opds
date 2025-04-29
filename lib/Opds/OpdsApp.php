@@ -18,7 +18,12 @@ class OpdsApp {
 	 * @param string $appVersion application version.
 	 * @param string $appWebsite application home page URL.
 	 */
-	public function __construct(private string $appId, private string $appName, private string $appVersion, private string $appWebsite) {
+	public function __construct(
+		private string $appId,
+		private string $appName,
+		private string $appVersion,
+		private string $appWebsite,
+	) {
 	}
 
 	/**

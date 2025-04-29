@@ -15,7 +15,7 @@ trait CalibreStub {
 	protected function createCalibreItem(string $cls, ICalibreDB $db, array $data, ?array $subData = null): CalibreItem {
 		$instCls = new ReflectionClass($cls);
 		if (!$instCls->isSubclassOf(CalibreItem::class)) {
-			throw new Exception('class '.$cls.' is not a subclass of CalibreItem');
+			throw new Exception('class ' . $cls . ' is not a subclass of CalibreItem');
 		}
 		$instConstructor = $instCls->getConstructor();
 		$instConstructor->setAccessible(true);

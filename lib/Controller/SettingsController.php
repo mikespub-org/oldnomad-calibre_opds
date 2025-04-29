@@ -14,7 +14,11 @@ use Psr\Log\LoggerInterface;
 use UnexpectedValueException;
 
 class SettingsController extends Controller {
-	public function __construct(IRequest $request, private ISettingsService $settings, private LoggerInterface $logger) {
+	public function __construct(
+		IRequest $request,
+		private ISettingsService $settings,
+		private LoggerInterface $logger,
+	) {
 		parent::__construct($settings->getAppId(), $request);
 	}
 
@@ -25,7 +29,7 @@ class SettingsController extends Controller {
 		try {
 			$this->settings->setLibrary($libraryRoot);
 		} catch (PreConditionNotMetException|UnexpectedValueException $e) {
-			$this->logger->error('Exception in '.__FUNCTION__, [ 'exception' => $e ]);
+			$this->logger->error('Exception in ' . __FUNCTION__, [ 'exception' => $e ]);
 		}
 		return [
 			'libraryRoot' => $this->settings->getLibrary()

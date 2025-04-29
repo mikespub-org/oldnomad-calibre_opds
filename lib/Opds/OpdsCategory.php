@@ -17,7 +17,11 @@ class OpdsCategory {
 	 * @param string|null $schema category schema URI, or `null` if not defined.
 	 * @param string|null $label category label, or `null` if not defined.
 	 */
-	public function __construct(private string $term, private ?string $schema = null, private ?string $label = null) {
+	public function __construct(
+		private string $term,
+		private ?string $schema = null,
+		private ?string $label = null,
+	) {
 	}
 
 	/**

@@ -25,7 +25,11 @@ class OpdsAttribute {
 	 * @param string $tag tag name.
 	 * @param scalar|DateTimeInterface|null $value tag contents, or `null`.
 	 */
-	public function __construct(private ?string $ns, private string $tag, private mixed $value) {
+	public function __construct(
+		private ?string $ns,
+		private string $tag,
+		private mixed $value,
+	) {
 	}
 
 	/**

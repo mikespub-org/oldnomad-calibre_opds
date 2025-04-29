@@ -15,6 +15,8 @@ use XMLWriter;
 
 /**
  * Implementation of OPDS feed response for Nextcloud.
+ *
+ * @template-extends Response<int, array<string, mixed>>
  */
 class OpdsResponse extends Response {
 	/**
@@ -53,7 +55,12 @@ class OpdsResponse extends Response {
 	 * @param string $title feed title.
 	 * @param string|null $icon feed icon URL, or `null` if not defined.
 	 */
-	public function __construct(private OpdsApp $app, private string $id, private string $title, private ?string $icon = null) {
+	public function __construct(
+		private OpdsApp $app,
+		private string $id,
+		private string $title,
+		private ?string $icon = null,
+	) {
 		$this->updated = new DateTimeImmutable();
 		$this->links = [];
 		$this->entries = [];
@@ -216,7 +223,7 @@ class OpdsResponse extends Response {
 		$xml->startElementNs(null, 'feed', 'http://www.w3.org/2005/Atom');
 		$xml->writeAttributeNs('xmlns', 'dc', null, 'http://purl.org/dc/terms/');
 		$xml->writeAttributeNs('xmlns', 'opds', null, 'http://opds-spec.org/2010/catalog');
-		$xml->writeElement('id', 'opds:'.$this->id);
+		$xml->writeElement('id', 'opds:' . $this->id);
 		foreach ($this->links as $link) {
 			self::writeLink($xml, $link);
 		}
@@ -233,7 +240,7 @@ class OpdsResponse extends Response {
 		}
 		foreach ($this->entries as $entry) {
 			$xml->startElement('entry');
-			$xml->writeElement('id', 'opds:'.$entry->getId());
+			$xml->writeElement('id', 'opds:' . $entry->getId());
 			$xml->writeElement('title', $entry->getTitle());
 			$xml->writeElement('updated', ($entry->getUpdated() ?? $this->updated)->format('c'));
 			foreach ($entry->getAuthors() as $author) {

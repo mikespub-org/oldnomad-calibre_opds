@@ -51,7 +51,7 @@ class CalibreBookFormat extends CalibreItem {
 		 * @var string $this->name
 		 * @var string $this->format
 		 */
-		$filename = $this->path.'/'.$this->name.'.'.strtolower($this->format);
+		$filename = $this->path . '/' . $this->name . '.' . strtolower($this->format);
 		$data = $root->get($filename);
 		if (!$data->isReadable() || $data->getType() !== FileInfo::TYPE_FILE || !($data instanceof File)) {
 			return null;

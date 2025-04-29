@@ -37,7 +37,7 @@
         }
     ],
     "require-dev": {
-        "nextcloud/ocp": "^26",
+        "nextcloud/ocp": "^31",
         "nextcloud/coding-standard": "^1",
         "nextcloud/translationtool": "^0-dev",
         "php-parallel-lint/php-parallel-lint": "^1",

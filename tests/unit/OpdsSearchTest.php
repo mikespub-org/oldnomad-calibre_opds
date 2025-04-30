@@ -5,6 +5,7 @@ declare(strict_types=1);
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 use OCA\Calibre2OPDS\Opds\OpenSearchResponse;
+use OCP\AppFramework\Http;
 use PHPUnit\Framework\TestCase;
 
 class OpdsSearchTest extends TestCase {
@@ -40,6 +41,7 @@ class OpdsSearchTest extends TestCase {
 			self::SEARCH_TEMPLATE_ICON_URL,
 			self::SEARCH_TEMPLATE_TEMPLATE
 		);
+		$this->assertEquals(Http::STATUS_OK, $search->getStatus(), 'Missing status');
 		$xml = $search->render();
 		$actual = simplexml_load_string($xml, SimpleXMLElement::class, LIBXML_NOBLANKS);
 		$expected = simplexml_load_string(self::SEARCH_TEMPLATE_XML, SimpleXMLElement::class, LIBXML_NOBLANKS);
@@ -54,6 +56,7 @@ class OpdsSearchTest extends TestCase {
 			null,
 			self::SEARCH_TEMPLATE_TEMPLATE
 		);
+		$this->assertEquals(Http::STATUS_OK, $search->getStatus(), 'Missing status');
 		$xml = $search->render();
 		$actual = simplexml_load_string($xml, SimpleXMLElement::class, LIBXML_NOBLANKS);
 		$expected = simplexml_load_string(self::SEARCH_TEMPLATE_XML_MINIMAL, SimpleXMLElement::class, LIBXML_NOBLANKS);

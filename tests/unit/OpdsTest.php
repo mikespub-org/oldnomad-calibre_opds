@@ -11,6 +11,7 @@ use OCA\Calibre2OPDS\Opds\OpdsCategory;
 use OCA\Calibre2OPDS\Opds\OpdsEntry;
 use OCA\Calibre2OPDS\Opds\OpdsLink;
 use OCA\Calibre2OPDS\Opds\OpdsResponse;
+use OCP\AppFramework\Http;
 use PHPUnit\Framework\TestCase;
 
 class OpdsTest extends TestCase {
@@ -104,6 +105,7 @@ class OpdsTest extends TestCase {
 		$app = new OpdsApp(self::APP_ID, self::APP_NAME, self::APP_VERSION, self::APP_WEBSITE);
 		$this->assertEquals(self::APP_ID, $app->getAppId(), 'App ID');
 		$opds = new OpdsResponse($app, self::RESPONSE_ID, self::RESPONSE_TITLE, self::RESPONSE_ICON_URL);
+		$this->assertEquals(Http::STATUS_OK, $opds->getStatus(), 'Missing status');
 		$updated = new DateTimeImmutable(self::RESPONSE_UPDATED);
 		$opds->setUpdated($updated);
 		$this->assertEquals($updated, $opds->getUpdated(), 'Updated timestamp');

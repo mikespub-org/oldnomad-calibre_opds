@@ -61,6 +61,7 @@ class OpdsResponse extends Response {
 		private string $title,
 		private ?string $icon = null,
 	) {
+		parent::__construct();
 		$this->updated = new DateTimeImmutable();
 		$this->links = [];
 		$this->entries = [];

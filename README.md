@@ -4,6 +4,9 @@ SPDX-License-Identifier:  CC0-1.0
 -->
 # Calibre2OPDS app
 
+[![pipeline status](https://gitlab.com/oldnomad/calibre_opds/badges/master/pipeline.svg)](https://gitlab.com/oldnomad/calibre_opds/-/commits/master) [![coverage report](https://gitlab.com/oldnomad/calibre_opds/badges/master/coverage.svg)](https://gitlab.com/oldnomad/calibre_opds/-/commits/master) [![Latest Release](https://gitlab.com/oldnomad/calibre_opds/-/badges/release.svg)](https://gitlab.com/oldnomad/calibre_opds/-/releases)
+
+
 The Calibre2OPDS app provides access to user's [Calibre](https://calibre-ebook.com/) library
 stored in Nextcloud via [OPDS](https://specs.opds.io/opds-1.2).
 

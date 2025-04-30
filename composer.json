@@ -47,7 +47,7 @@
     "scripts": {
         "cs": "php-cs-fixer fix --using-cache=no --dry-run --diff",
         "lint": "parallel-lint ./appinfo ./lib",
-        "phpunit": "XDEBUG_MODE=coverage phpunit",
+        "phpunit": "XDEBUG_MODE=coverage phpunit --coverage-text",
         "psalm": "psalm.phar --config=psalm.xml --no-cache",
         "tests": [
             "@lint",

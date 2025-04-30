@@ -40,6 +40,7 @@ class OpenSearchResponse extends Response {
 		private ?string $icon,
 		private string $template,
 	) {
+		parent::__construct();
 	}
 
 	public function render(): string {

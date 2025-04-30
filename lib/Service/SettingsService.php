@@ -40,8 +40,15 @@ class SettingsService implements ISettingsService {
 	 */
 	private ?array $appInfo;
 
-	public function __construct(private LoggerInterface $logger, private IConfig $config, private IUserSession $userSession,
-		private IRootFolder $rootFolder, private IURLGenerator $urlGenerator, private IAppManager $appManager, private IL10N $l) {
+	public function __construct(
+		private LoggerInterface $logger,
+		private IConfig $config,
+		private IUserSession $userSession,
+		private IRootFolder $rootFolder,
+		private IURLGenerator $urlGenerator,
+		private IAppManager $appManager,
+		private IL10N $l,
+	) {
 		$this->appInfo = null;
 	}
 
@@ -79,7 +86,7 @@ class SettingsService implements ISettingsService {
 	}
 
 	public function getAppRouteLink(string $route, array $parameters = []): string {
-		return $this->urlGenerator->linkToRoute(Application::APP_ID.'.opds.'.$route, $parameters);
+		return $this->urlGenerator->linkToRoute(Application::APP_ID . '.opds.' . $route, $parameters);
 	}
 
 	public function getAppImageLink(string $path): string {
@@ -88,7 +95,7 @@ class SettingsService implements ISettingsService {
 
 	public function getLanguageName(string $code): string {
 		$pref_lang = $this->l->getLocaleCode();
-		return locale_get_display_name($code, $pref_lang) ?: '@'.$code;
+		return locale_get_display_name($code, $pref_lang) ?: '@' . $code;
 	}
 
 	public function getSettings(): array {

@@ -17,7 +17,11 @@ class OpdsLink {
 	 * @param string $url link URL.
 	 * @param string $mimeType link MIME type.
 	 */
-	public function __construct(private string $rel, private string $url, private string $mimeType) {
+	public function __construct(
+		private string $rel,
+		private string $url,
+		private string $mimeType,
+	) {
 	}
 
 	/**

@@ -12,6 +12,7 @@ use OCP\Files\Folder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
+use PHPUnit\Framework\MockObject\Stub;
 
 trait StorageStub {
 	protected IStorage $storage;
@@ -19,20 +20,19 @@ trait StorageStub {
 	protected function initStorage(string $path, bool $fake = false): void {
 		$storage = $this->createStub(IStorage::class);
 		$storage->method('getLocalFile')->willReturnCallback(
-			fn (string $filePath): string => $fake ? $path : ($path.'/'.$filePath)
+			fn (string $filePath): string => $fake ? $path : ($path . '/' . $filePath)
 		);
 		$this->storage = $storage;
 	}
 
-	private function createStorageNode(string $cls, string $type, string $name, bool $readable): Node {
+	private function createStorageNode(string $cls, string $type, string $name, bool $readable): Node&Stub {
 		$node = $this->createStub($cls);
-		$node->parent = null;
-		$node->name = $name;
-		$node->content = null;
 		$node->method('isReadable')->willReturn($readable);
 		$node->method('getType')->willReturn($type);
+		$node->method('getName')->willReturn($name);
 		$node->method('getInternalPath')->willReturnCallback(function () use ($node) {
-			return (is_null($node->parent) ? '' : $node->parent->getInternalPath()).'/'.$node->name;
+			$parent = $node->getParent();
+			return (is_null($parent) ? '' : $parent->getInternalPath()) . '/' . $node->getName();
 		});
 		$node->method('getStorage')->willReturn($this->storage);
 		return $node;
@@ -45,17 +45,16 @@ trait StorageStub {
 
 	protected function createFolderNode(string $dirname, array $content, bool $readable = true): Folder {
 		$dir = $this->createStorageNode(Folder::class, FileInfo::TYPE_FOLDER, $dirname, $readable);
-		$dir->content = $content;
-		foreach ($dir->content as $sub) {
-			$sub->parent = $dir;
+		foreach ($content as $sub) {
+			$sub->method('getParent')->willReturn($dir);
 		}
-		$dir->method('get')->willReturnCallback(function (string $path) use ($dir): Node {
+		$dir->method('get')->willReturnCallback(function (string $path) use ($dir, $content): Node {
 			if ($path === '') {
 				throw new NotFoundException('cannot find file with empty name');
 			}
 			$parts = explode('/', $path, 2);
-			foreach ($dir->content as $sub) {
-				if ($sub->name === $parts[0]) {
+			foreach ($content as $sub) {
+				if ($sub->getName() === $parts[0]) {
 					if (isset($parts[1])) {
 						if ($sub->getType() !== FileInfo::TYPE_FOLDER) {
 							throw new NotFoundException('found file, expecting directory');
@@ -63,13 +62,13 @@ trait StorageStub {
 						try {
 							return $sub->get($parts[1]);
 						} catch (NotFoundException $e) {
-							throw new NotFoundException('not found: '.$path, 0, $e);
+							throw new NotFoundException('not found: ' . $path, 0, $e);
 						}
 					}
 					return $sub;
 				}
 			}
-			throw new NotFoundException('not found: '.$path);
+			throw new NotFoundException('not found: ' . $path);
 		});
 		return $dir;
 	}

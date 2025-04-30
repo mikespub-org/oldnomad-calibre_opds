@@ -1,3 +1,8 @@
+#
+# SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
+# SPDX-License-Identifier:  CC0-1.0
+#
+
 # Common MIME types for e-books
 application/epub+zip                epub
 application/msword                  doc
@@ -12,6 +17,7 @@ application/x-ms-reader             lit
 image/vnd.djvu                      djvu
 text/rtf                            rtf
 text/plain                          txt
+
 # Image MIME types
 image/jpeg                          jpg
 image/x-icon                        ico

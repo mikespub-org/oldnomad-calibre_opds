@@ -33,13 +33,20 @@ use OCP\IL10N;
 class OpdsFeedBuilder implements IOpdsFeedBuilder {
 	private OpdsResponse $response;
 
-	public function __construct(private ISettingsService $settings, private IL10N $l,
-		string $selfRoute, array $selfParams, string $title, ?string $upRoute, array $upParams) {
+	public function __construct(
+		private ISettingsService $settings,
+		private IL10N $l,
+		string $selfRoute,
+		array $selfParams,
+		string $title,
+		?string $upRoute,
+		array $upParams,
+	) {
 		unset($selfParams['_route']);
 		$id = $selfRoute;
 		/** @var scalar $value */
 		foreach ($selfParams as $key => $value) {
-			$id .= ':'.$key.'='.$value;
+			$id .= ':' . $key . '=' . $value;
 		}
 		$app = new OpdsApp($this->settings->getAppId(), $this->settings->getAppName(), $this->settings->getAppVersion(), $this->settings->getAppWebsite());
 		$this->response = new OpdsResponse($app, $id, $title, $this->settings->getAppImageLink('icon.ico'));
@@ -71,7 +78,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 		$criterion = $item::CRITERION;
 		if (is_null($criterion)) {
 			if (!($item instanceof CalibreAuthorPrefix)) {
-				throw new Exception('invalid navigation item call with class '.get_class($item));
+				throw new Exception('invalid navigation item call with class ' . get_class($item));
 			}
 			$routeName = 'authors';
 			$routeArgs = [ 'prefix' => $item->prefix ];
@@ -87,7 +94,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 		}
 		/** @var string */
 		$uriPrefix = $item::URI;
-		$this->response->addEntry((new OpdsEntry($uriPrefix.':'.$item->id, $item->name, $summary))->addLink(
+		$this->response->addEntry((new OpdsEntry($uriPrefix . ':' . $item->id, $item->name, $summary))->addLink(
 			$this->getRouteLink($rel, null, $routeName, $routeArgs)
 		));
 		return $this;
@@ -103,7 +110,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 		 * @var ?DateTimeInterface $item->timestamp
 		 * @var ?string $item->uuid
 		 */
-		$entry = new OpdsEntry('book:'.$item->id, $item->title, $item->comment);
+		$entry = new OpdsEntry('book:' . $item->id, $item->title, $item->comment);
 		$entry->setUpdated($item->last_modified);
 		if (!is_null($item->pubdate)) {
 			$entry->addAttribute(new OpdsAttribute('dc', 'issued', $item->pubdate));
@@ -112,7 +119,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 			$entry->addAttribute(new OpdsAttribute(null, 'published', $item->timestamp));
 		}
 		if (!is_null($item->uuid) && $item->uuid !== '') {
-			$entry->addAttribute(new OpdsAttribute('dc', 'identifier', 'urn:uuid:'.$item->uuid));
+			$entry->addAttribute(new OpdsAttribute('dc', 'identifier', 'urn:uuid:' . $item->uuid));
 		}
 		/** @var CalibreBookId $ident */
 		foreach ($item->identifiers as $ident) {
@@ -123,7 +130,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 			if (in_array($ident->type, OpdsResponse::LITERAL_IDENTIFIER_TYPES)) {
 				$value = $ident->value;
 			} else {
-				$value = 'urn:'.$ident->type.':'.$ident->value;
+				$value = 'urn:' . $ident->type . ':' . $ident->value;
 			}
 			$entry->addAttribute(new OpdsAttribute('dc', 'identifier', $value));
 		}

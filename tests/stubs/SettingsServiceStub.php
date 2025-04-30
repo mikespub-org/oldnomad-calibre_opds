@@ -23,13 +23,13 @@ trait SettingsServiceStub {
 		$settings->method('getAppName')->willReturn(self::SETTINGS_APP_NAME);
 		$settings->method('getAppWebsite')->willReturn(self::SETTINGS_APP_WEBSITE);
 		$settings->method('getAppRouteLink')->willReturnCallback(function (string $route, array $parameters) {
-			return 'app-route:'.$route.'?'.implode('&', array_map(fn ($k, $v) => $k.'='.$v, array_keys($parameters), array_values($parameters)));
+			return 'app-route:' . $route . '?' . implode('&', array_map(fn ($k, $v) => $k . '=' . $v, array_keys($parameters), array_values($parameters)));
 		});
 		$settings->method('getAppImageLink')->willReturnCallback(function (string $path) {
-			return 'app-img:'.$path;
+			return 'app-img:' . $path;
 		});
 		$settings->method('getLanguageName')->willReturnCallback(function (string $code) {
-			return '@'.$code;
+			return '@' . $code;
 		});
 		$this->settings = $settings;
 	}

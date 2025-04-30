@@ -17,7 +17,11 @@ class OpdsAuthor {
 	 * @param string|null $uri author URI, or `null` if not known.
 	 * @param string|null $email author e-mail, or `null` if not known.
 	 */
-	public function __construct(private string $name, private ?string $uri = null, private ?string $email = null) {
+	public function __construct(
+		private string $name,
+		private ?string $uri = null,
+		private ?string $email = null,
+	) {
 	}
 
 	/**

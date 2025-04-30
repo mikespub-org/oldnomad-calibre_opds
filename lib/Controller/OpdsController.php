@@ -73,7 +73,7 @@ class OpdsController extends Controller {
 			$lib = $this->calibre->getDatabase($libPath);
 			return call_user_func($func, $libPath, $lib);
 		} catch (Exception $e) {
-			$this->logger->error('Exception in '.__FUNCTION__, [ 'exception' => $e ]);
+			$this->logger->error('Exception in ' . __FUNCTION__, [ 'exception' => $e ]);
 			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -294,7 +294,11 @@ class OpdsController extends Controller {
 			if (is_null($file)) {
 				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
 			}
-			return (new StreamResponse($file->fopen('r')))->addHeader('Content-Type', MimeTypes::getMimeType($type));
+			$data = $file->fopen('r');
+			if ($data === false) {
+				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
+			}
+			return (new StreamResponse($data))->addHeader('Content-Type', MimeTypes::getMimeType($type));
 		});
 	}
 
@@ -313,7 +317,11 @@ class OpdsController extends Controller {
 			if (is_null($file)) {
 				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
 			}
-			return (new StreamResponse($file->fopen('r')))->addHeader('Content-Type', MimeTypes::getMimeType('jpg'));
+			$data = $file->fopen('r');
+			if ($data === false) {
+				return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
+			}
+			return (new StreamResponse($data))->addHeader('Content-Type', MimeTypes::getMimeType('jpg'));
 		});
 	}
 }

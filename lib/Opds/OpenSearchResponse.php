@@ -11,6 +11,8 @@ use XMLWriter;
 
 /**
  * Implementation of OpenSearch descriptor response for Nextcloud.
+ *
+ * @template-extends Response<int, array<string, mixed>>
  */
 class OpenSearchResponse extends Response {
 	/**
@@ -31,7 +33,13 @@ class OpenSearchResponse extends Response {
 	 * @param string|null $icon search icon URL, or `null` if not defined.
 	 * @param string $template search URL template.
 	 */
-	public function __construct(private string $shortName, private ?string $longName, private string $description, private ?string $icon, private string $template) {
+	public function __construct(
+		private string $shortName,
+		private ?string $longName,
+		private string $description,
+		private ?string $icon,
+		private string $template,
+	) {
 	}
 
 	public function render(): string {

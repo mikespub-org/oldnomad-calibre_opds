@@ -39,6 +39,40 @@ class CalibreBook extends CalibreItem {
 		%2$s
 		order by %3$s books.sort
 	EOT;
+	/**
+	 * SQL statement elements for various criteria.
+	 *
+	 * These are parameters for `SQL_BOOKS` format.
+	 *
+	 * @var array<string,list{string,string,string}>
+	 */
+	private const SQL_CRITERIA = [
+		CalibreBookCriteria::AUTHOR->value => [
+			'inner join books_authors_link as bal on books.id = bal.book',
+			'where bal.author = ?',
+			''
+		],
+		CalibreBookCriteria::PUBLISHER->value => [
+			'inner join books_publishers_link as bpl on books.id = bpl.book',
+			'where bpl.publisher = ?',
+			''
+		],
+		CalibreBookCriteria::LANGUAGE->value => [
+			'inner join books_languages_link as bll on books.id = bll.book',
+			'where bll.lang_code = ?',
+			''
+		],
+		CalibreBookCriteria::SERIES->value => [
+			'inner join books_series_link as bsl on books.id = bsl.book',
+			'where bsl.series = ?',
+			'books.series_index,'
+		],
+		CalibreBookCriteria::TAG->value => [
+			'inner join books_tags_link as btl on books.id = btl.book',
+			'where btl.tag = ?',
+			''
+		],
+	];
 
 	private function __construct(ICalibreDB $db, array $data) {
 		parent::__construct($db, $data);
@@ -74,7 +108,7 @@ class CalibreBook extends CalibreItem {
 			return null;
 		}
 		/** @var string $this->path */
-		$filename = $this->path.'/cover.jpg';
+		$filename = $this->path . '/cover.jpg';
 		$data = $root->get($filename);
 		if (!$data->isReadable() || $data->getType() !== FileInfo::TYPE_FILE || !($data instanceof File)) {
 			return null;
@@ -93,44 +127,14 @@ class CalibreBook extends CalibreItem {
 	 * @throws PDOException on error.
 	 */
 	public static function getByCriterion(ICalibreDB $db, ?CalibreBookCriteria $criterion = null, string $data = ''): Traversable {
-		$join = '';
-		$where = '';
-		$sort = '';
-		$terms = null;
-		$params = [$data];
-		$filter = null;
-		switch ($criterion) {
-			case CalibreBookCriteria::SEARCH:
-				$filter = CalibreSearch::searchBooks($data);
-				$params = [];
-				break;
-			case CalibreBookCriteria::AUTHOR:
-				$where = 'where bal.author = ?';
-				$join = 'inner join books_authors_link as bal on books.id = bal.book';
-				break;
-			case CalibreBookCriteria::PUBLISHER:
-				$where = 'where bpl.publisher = ?';
-				$join = 'inner join books_publishers_link as bpl on books.id = bpl.book';
-				break;
-			case CalibreBookCriteria::LANGUAGE:
-				$where = 'where bll.lang_code = ?';
-				$join = 'inner join books_languages_link as bll on books.id = bll.book';
-				break;
-			case CalibreBookCriteria::SERIES:
-				$where = 'where bsl.series = ?';
-				$join = 'inner join books_series_link as bsl on books.id = bsl.book';
-				$sort = 'books.series_index,';
-				break;
-			case CalibreBookCriteria::TAG:
-				$where = 'where btl.tag = ?';
-				$join = 'inner join books_tags_link as btl on books.id = btl.book';
-				break;
-			default:
-				$params = [];
-				break;
+		$sqlelem = [ '', '', '' ];
+		if (!is_null($criterion)) {
+			$sqlelem = self::SQL_CRITERIA[$criterion->value] ?? $sqlelem;
 		}
+		$filter = ($criterion === CalibreBookCriteria::SEARCH) ? CalibreSearch::searchBooks($data) : null;
+		$params = ($sqlelem[1] === '') ? [] : [$data];
 		return new MapAggregate(
-			$db->query(sprintf(self::SQL_BOOKS, $join, $where, $sort), $params),
+			$db->query(sprintf(self::SQL_BOOKS, ...$sqlelem), $params),
 			fn (array $row) => new self($db, $row),
 			$filter
 		);

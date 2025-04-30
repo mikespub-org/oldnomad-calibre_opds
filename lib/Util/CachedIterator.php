@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace OCA\Calibre2OPDS\Util;
 
-use ArrayIterator;
 use Iterator;
 
 /**
@@ -30,9 +29,13 @@ class CachedIterator implements Iterator {
 	 */
 	private bool $initialPass;
 	/**
+	 * Current element index.
+	 */
+	private int $index;
+	/**
 	 * Cached iterator data.
 	 *
-	 * @var array<array<TKey,TValue>>
+	 * @var array<list{TKey,TValue}>
 	 */
 	private array $cache;
 
@@ -44,62 +47,60 @@ class CachedIterator implements Iterator {
 	public function __construct(Iterator $inner) {
 		$this->inner = $inner;
 		$this->initialPass = true;
+		$this->index = 0;
 		$this->cache = [];
-		if ($this->inner->valid()) {
-			$this->cache[] = [ $this->key() => $this->current() ];
+	}
+
+	/**
+	 * Get entry by index.
+	 *
+	 * @param int $index entry index.
+	 * @return null|list{TKey,TValue} single entry, or null if doesn't exist.
+	 */
+	private function entry(int $index): ?array {
+		if ($index < count($this->cache)) {
+			return $this->cache[$index];
 		}
+		if (!$this->initialPass) {
+			return null;
+		}
+		$last = null;
+		for ($i = count($this->cache); $i <= $index; ++$i) {
+			if (!$this->inner->valid()) {
+				$this->initialPass = false;
+				return null;
+			}
+			$this->cache[] = $last = [ $this->inner->key(), $this->inner->current() ];
+			$this->inner->next();
+		}
+		return $last;
 	}
 
 	/**
 	 * @return TValue
 	 */
 	public function current(): mixed {
-		return $this->inner->current();
+		$entry = $this->entry($this->index);
+		return is_null($entry) ? null : $entry[1];
 	}
 
 	/**
 	 * @return TKey
 	 */
 	public function key(): mixed {
-		return $this->inner->key();
+		$entry = $this->entry($this->index);
+		return is_null($entry) ? null : $entry[0];
 	}
 
 	public function next(): void {
-		$this->inner->next();
-		if ($this->initialPass && $this->inner->valid()) {
-			$this->cache[] = [ $this->key() => $this->current() ];
-		}
+		$this->index++;
 	}
 
 	public function rewind(): void {
-		if ($this->initialPass) {
-			while ($this->valid()) {
-				$this->next();
-			}
-			$this->initialPass = false;
-			/**
-			 * Psalm gets confused with this.
-			 * @psalm-suppress MissingTemplateParam
-			 * @psalm-suppress MixedAssignment
-			 * @psalm-suppress MixedArrayAccess
-			 * @psalm-suppress MixedArgument
-			 */
-			$this->inner = new class($this->cache) extends ArrayIterator {
-				public function current(): mixed {
-					$val = parent::current();
-					return $val[$this->key()];
-				}
-
-				public function key(): string|int|null {
-					$val = parent::current();
-					return array_key_first($val);
-				}
-			};
-		}
-		$this->inner->rewind();
+		$this->index = 0;
 	}
 
 	public function valid(): bool {
-		return $this->inner->valid();
+		return !is_null($this->entry($this->index));
 	}
 }

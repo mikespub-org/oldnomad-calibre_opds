@@ -238,9 +238,9 @@ class OpdsFeedTest extends TestCase {
 		foreach ($resp->getLinks() as $key => $link) {
 			$this->assertNotEmpty($expectedLinks, 'Feed -- too many links');
 			$expected = array_shift($expectedLinks);
-			$this->assertEquals($expected[0], $link->getRel(), 'Feed -- link '.$key.' -- rel');
-			$this->assertEquals($expected[1], $link->getURL(), 'Feed -- link '.$key.' -- URL');
-			$this->assertEquals($expected[2], $link->getMimeType(), 'Feed -- link '.$key.' -- MIME type');
+			$this->assertEquals($expected[0], $link->getRel(), 'Feed -- link ' . $key . ' -- rel');
+			$this->assertEquals($expected[1], $link->getURL(), 'Feed -- link ' . $key . ' -- URL');
+			$this->assertEquals($expected[2], $link->getMimeType(), 'Feed -- link ' . $key . ' -- MIME type');
 		}
 		$this->assertEmpty($expectedLinks, 'Feed -- not enough links');
 
@@ -248,56 +248,68 @@ class OpdsFeedTest extends TestCase {
 		foreach ($resp->getEntries() as $key => $entry) {
 			$this->assertNotEmpty($expectedEntries, 'Feed -- too many entries');
 			$expected = array_shift($expectedEntries);
-			$this->assertEquals($expected[0], $entry->getId(), 'Feed -- entry '.$key.' -- ID');
-			$this->assertEquals($expected[1], $entry->getTitle(), 'Feed -- entry '.$key.' -- title');
-			$this->assertEquals($expected[2], $entry->getSummary(), 'Feed -- entry '.$key.' -- summary');
+			$this->assertEquals($expected[0], $entry->getId(), 'Feed -- entry ' . $key . ' -- ID');
+			$this->assertEquals($expected[1], $entry->getTitle(), 'Feed -- entry ' . $key . ' -- title');
+			$this->assertEquals($expected[2], $entry->getSummary(), 'Feed -- entry ' . $key . ' -- summary');
 
 			$expectedUpdated = $expected[3] ?? null;
 			if (!is_null($expectedUpdated)) {
 				$expectedUpdated = new DateTimeImmutable($expectedUpdated);
 			}
-			$this->assertEquals($expectedUpdated, $entry->getUpdated(), 'Feed -- entry '.$key.' -- updated');
+			$this->assertEquals($expectedUpdated, $entry->getUpdated(), 'Feed -- entry ' . $key . ' -- updated');
 
 			$expectedAuthors = $expected[4] ?? [];
 			foreach ($entry->getAuthors() as $authorKey => $author) {
-				$this->assertNotEmpty($expectedAuthors, 'Feed -- entry '.$key.' -- too many authors');
+				$this->assertNotEmpty($expectedAuthors, 'Feed -- entry ' . $key . ' -- too many authors');
 				$expectedAuthor = array_shift($expectedAuthors);
-				$this->assertEquals($expectedAuthor[0], $author->getName(), 'Feed -- entry '.$key.' -- author '.$authorKey.' -- name');
-				$this->assertEquals($expectedAuthor[1] ?? null, $author->getURI(), 'Feed -- entry '.$key.' -- author '.$authorKey.' -- URI');
-				$this->assertEquals($expectedAuthor[2] ?? null, $author->getEMail(), 'Feed -- entry '.$key.' -- author '.$authorKey.' -- e-mail');
+				$this->assertEquals($expectedAuthor[0], $author->getName(), 'Feed -- entry ' . $key . ' -- author ' . $authorKey . ' -- name');
+				$this->assertEquals($expectedAuthor[1] ?? null, $author->getURI(), 'Feed -- entry ' . $key . ' -- author ' . $authorKey . ' -- URI');
+				$this->assertEquals($expectedAuthor[2] ?? null, $author->getEMail(), 'Feed -- entry ' . $key . ' -- author ' . $authorKey . ' -- e-mail');
 			}
-			$this->assertEmpty($expectedAuthors, 'Feed -- entry '.$key.' -- not enough authors');
+			$this->assertEmpty($expectedAuthors, 'Feed -- entry ' . $key . ' -- not enough authors');
 
 			$expectedCategories = $expected[5] ?? [];
 			foreach ($entry->getCategories() as $catKey => $cat) {
-				$this->assertNotEmpty($expectedCategories, 'Feed -- entry '.$key.' -- too many categories');
+				$this->assertNotEmpty($expectedCategories, 'Feed -- entry ' . $key . ' -- too many categories');
 				$expectedCat = array_shift($expectedCategories);
-				$this->assertEquals($expectedCat[0], $cat->getTerm(), 'Feed -- entry '.$key.' -- category '.$catKey.' -- term');
-				$this->assertEquals($expectedCat[1] ?? null, $cat->getSchema(), 'Feed -- entry '.$key.' -- category '.$catKey.' -- schema');
-				$this->assertEquals($expectedCat[2] ?? null, $cat->getLabel(), 'Feed -- entry '.$key.' -- category '.$catKey.' -- label');
+				$this->assertEquals($expectedCat[0], $cat->getTerm(), 'Feed -- entry ' . $key . ' -- category ' . $catKey . ' -- term');
+				$this->assertEquals($expectedCat[1] ?? null, $cat->getSchema(), 'Feed -- entry ' . $key . ' -- category ' . $catKey . ' -- schema');
+				$this->assertEquals($expectedCat[2] ?? null, $cat->getLabel(), 'Feed -- entry ' . $key . ' -- category ' . $catKey . ' -- label');
 			}
-			$this->assertEmpty($expectedCategories, 'Feed -- entry '.$key.' -- not enough categories');
+			$this->assertEmpty($expectedCategories, 'Feed -- entry ' . $key . ' -- not enough categories');
 
 			$expectedLinks = $expected[6] ?? [];
 			foreach ($entry->getLinks() as $linkKey => $link) {
-				$this->assertNotEmpty($expectedLinks, 'Feed -- entry '.$key.' -- too many links');
+				$this->assertNotEmpty($expectedLinks, 'Feed -- entry ' . $key . ' -- too many links');
 				$expectedLink = array_shift($expectedLinks);
-				$this->assertEquals($expectedLink[0], $link->getRel(), 'Feed -- entry '.$key.' -- link '.$linkKey.' -- rel');
-				$this->assertEquals($expectedLink[1], $link->getURL(), 'Feed -- entry '.$key.' -- link '.$linkKey.' -- URL');
-				$this->assertEquals($expectedLink[2] ?? OpdsResponse::MIME_TYPE_ATOM, $link->getMimeType(), 'Feed -- entry '.$key.' -- link '.$linkKey.' -- MIME type');
+				$this->assertEquals($expectedLink[0], $link->getRel(), 'Feed -- entry ' . $key . ' -- link ' . $linkKey . ' -- rel');
+				$this->assertEquals($expectedLink[1], $link->getURL(), 'Feed -- entry ' . $key . ' -- link ' . $linkKey . ' -- URL');
+				$this->assertEquals($expectedLink[2] ?? OpdsResponse::MIME_TYPE_ATOM, $link->getMimeType(), 'Feed -- entry ' . $key . ' -- link ' . $linkKey . ' -- MIME type');
 			}
-			$this->assertEmpty($expectedLinks, 'Feed -- entry '.$key.' -- not enough links');
+			$this->assertEmpty($expectedLinks, 'Feed -- entry ' . $key . ' -- not enough links');
 
 			$expectedAttrs = $expected[7] ?? [];
 			foreach ($entry->getAttributes() as $attrKey => $attr) {
-				$this->assertNotEmpty($expectedAttrs, 'Feed -- entry '.$key.' -- too many attributes');
+				$this->assertNotEmpty($expectedAttrs, 'Feed -- entry ' . $key . ' -- too many attributes');
 				$expectedAttr = array_shift($expectedAttrs);
-				$this->assertEquals($expectedAttr[0], $attr->getNs(), 'Feed -- entry '.$key.' -- attr '.$attrKey.' -- NS');
-				$this->assertEquals($expectedAttr[1], $attr->getTag(), 'Feed -- entry '.$key.' -- attr '.$attrKey.' -- tag');
-				$this->assertEquals($expectedAttr[2] ?? null, $attr->getValueText(), 'Feed -- entry '.$key.' -- attr '.$attrKey.' -- value');
+				$this->assertEquals($expectedAttr[0], $attr->getNs(), 'Feed -- entry ' . $key . ' -- attr ' . $attrKey . ' -- NS');
+				$this->assertEquals($expectedAttr[1], $attr->getTag(), 'Feed -- entry ' . $key . ' -- attr ' . $attrKey . ' -- tag');
+				$this->assertEquals($expectedAttr[2] ?? null, $attr->getValueText(), 'Feed -- entry ' . $key . ' -- attr ' . $attrKey . ' -- value');
 			}
-			$this->assertEmpty($expectedAttrs, 'Feed -- entry '.$key.' -- not enough attributes');
+			$this->assertEmpty($expectedAttrs, 'Feed -- entry ' . $key . ' -- not enough attributes');
 		}
 		$this->assertEmpty($expectedEntries, 'Feed -- not enough entries');
+	}
+
+	public function testOpdsFeedException(): void {
+		$builder = new OpdsFeedBuilder($this->settings, $this->l,
+			self::SELF_ROUTE, self::SELF_PARAMS, self::FEED_TITLE,
+			self::UP_ROUTE, self::UP_PARAMS
+		);
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessageMatches('/^invalid navigation item call with class ' . preg_quote(CalibreBookId::class) . '$/');
+		$builder->addNavigationEntry($this->createCalibreItem(CalibreBookId::class, $this->db, [
+			'type' => 'uri', 'value' => 'id-uri'
+		]));
 	}
 }

@@ -13,7 +13,7 @@ trait LoggerInterfaceStub {
 	protected LoggerInterface $logger;
 
 	private function emulateLog($level, $message, array $context) {
-		error_log($level.':'.$message);
+		error_log($level . ':' . $message);
 	}
 
 	protected function initLoggerInterface(): void {

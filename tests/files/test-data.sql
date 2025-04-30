@@ -5,7 +5,7 @@ BEGIN TRANSACTION;
 INSERT INTO books (id, title, pubdate, path, has_cover, series_index, timestamp, last_modified) VALUES
 	(11, 'The Theory and Practice of Oligarchical Collectivism', '1984-11-07', 'oligarchical_collectivism', 0,      1.0, '',                 '1949-06-08'),
 	(12, 'Cicero for Dummies',                                   '2012-12-12', 'dummies_cicero',            1, 100500.0, '2022-02-24 04:00', '2023-09-30 17:18'),
-	(13, 'Whores of Eroticon 6',                                 '1978-03-08', 'whores_eroticon6',          1,      1.0, '',                 '2001-05-11 00:00'),
+	(13, 'Whores of Eroticon 6',                                 '1978-03-08', 'whores_eroticon6',          1,      1.0, '0101-01-01 00:00', '2001-05-11 00:00'),
 	(14, 'Plato for Dummies',                                    '2011-11-11', 'dummies_plato',             1, 100499.0, '',                 '2023-09-30 17:18');
 INSERT INTO comments (id, book, text) VALUES
 	(21, 12, 'Simple explanation of Cicero for imbeciles.');

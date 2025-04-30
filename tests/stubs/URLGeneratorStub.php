@@ -14,10 +14,10 @@ trait URLGeneratorStub {
 	protected function initUrlGenerator(): void {
 		$generator = $this->createStub(IURLGenerator::class);
 		$generator->method('linkToRoute')->willReturnCallback(function (string $routeName, array $arguments = []): string {
-			return 'route:'.$routeName.':'.implode(':', array_map(fn ($k, $v) => $k.'='.$v, array_keys($arguments), array_values($arguments)));
+			return 'route:' . $routeName . ':' . implode(':', array_map(fn ($k, $v) => $k . '=' . $v, array_keys($arguments), array_values($arguments)));
 		});
 		$generator->method('imagePath')->willReturnCallback(function (string $appName, string $file): string {
-			return 'image-path:'.$appName.':'.$file;
+			return 'image-path:' . $appName . ':' . $file;
 		});
 		$this->urlGenerator = $generator;
 	}

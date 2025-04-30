@@ -26,7 +26,9 @@ class CalibreSearch {
 	 *
 	 * @param non-empty-string $pattern search pattern to look for.
 	 */
-	private function __construct(private string $pattern) {
+	private function __construct(
+		private string $pattern,
+	) {
 	}
 
 	/**
@@ -100,7 +102,7 @@ class CalibreSearch {
 			return null;
 		}
 		$dataEsc = str_replace('/', '\/', $terms);
-		return '/'.normalizer_normalize($dataEsc, self::DEFAULT_FORM).'/inS';
+		return '/' . normalizer_normalize($dataEsc, self::DEFAULT_FORM) . '/inS';
 	}
 
 	/**

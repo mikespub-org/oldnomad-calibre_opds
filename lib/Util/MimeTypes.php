@@ -24,7 +24,7 @@ final class MimeTypes {
 	 *
 	 * @return bool `true` on success, `false` on error.
 	 */
-	public static function loadMimeTypes(string $filename = __DIR__.'/mime.types'): bool {
+	public static function loadMimeTypes(string $filename = __DIR__ . '/mime.types'): bool {
 		$list = [];
 		$lines = @file($filename, FILE_IGNORE_NEW_LINES);
 		if ($lines === false) {
@@ -35,8 +35,8 @@ final class MimeTypes {
 			if (strlen($line) == 0 || $line[0] === '#') {
 				continue;
 			}
-			$parts = preg_split('/\s+/', $line);
-			if ($parts === false) {
+			$parts = preg_split('/\s+/', $line, -1, PREG_SPLIT_NO_EMPTY);
+			if ($parts === false || count($parts) < 2) {
 				continue;
 			}
 			$type = array_shift($parts);

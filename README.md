@@ -11,6 +11,12 @@ stored in Nextcloud via [OPDS](https://specs.opds.io/opds-1.2).
 
 The source code is [available on GitLab](https://gitlab.com/oldnomad/calibre_opds/).
 
+## About this fork
+
+This fork was created to support nextcloud version 31 with a simple update of appinfo and composer - no code changes for upgrading from 26 to 31.
+
+The upstream repo [oldnomad/calibre_opds](https://github.com/oldnomad/calibre_opds) has now been updated to support nextcloud versions 29 to 32, so please use that instead...
+
 ## Usage
 
 This app is intended to be used in situation where you are storing your whole

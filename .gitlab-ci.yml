@@ -22,6 +22,7 @@ test-job:
   script:
     - composer update
     - composer tests
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
   artifacts:
     reports:
       coverage_report:

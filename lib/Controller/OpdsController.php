@@ -73,7 +73,7 @@ class OpdsController extends Controller {
 			$lib = $this->calibre->getDatabase($libPath);
 			return call_user_func($func, $libPath, $lib);
 		} catch (Exception $e) {
-			$this->logger->error('Exception in ' . __FUNCTION__, [ 'exception' => $e ]);
+			$this->logger->error('Exception in ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'], [ 'exception' => $e ]);
 			return (new Response())->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}

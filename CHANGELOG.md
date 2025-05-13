@@ -8,11 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 - Changelog format now adheres to Nextcloud requirements.
+- Improved exception logging.
 
 ## 0.0.5 - 2025-04-30
 
 ### Fixed
-- Missing HTTP status in `OpdsResponse` and `OpdsSearchResponse`.
+- Missing HTTP status in responses.
 
 ## 0.0.4 - 2025-04-29
 

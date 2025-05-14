@@ -13,7 +13,7 @@ trait LoggerInterfaceStub {
 	protected LoggerInterface $logger;
 
 	private function emulateLog($level, $message, array $context) {
-		error_log($level . ':' . $message);
+		error_log($level . ':' . $message . ':' . var_export($context, true));
 	}
 
 	protected function initLoggerInterface(): void {
@@ -29,19 +29,19 @@ trait LoggerInterfaceStub {
 			fn ($message, array $context) => $this->emulateLog(LogLevel::CRITICAL, $message, $context)
 		);
 		$logger->method('error')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::ERROR, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::ERROR, $message, $context)
 		);
 		$logger->method('warning')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::WARNING, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::WARNING, $message, $context)
 		);
 		$logger->method('notice')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::NOTICE, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::NOTICE, $message, $context)
 		);
 		$logger->method('info')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::INFO, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::INFO, $message, $context)
 		);
 		$logger->method('debug')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::DEBUG, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::DEBUG, $message, $context)
 		);
 		$this->logger = $logger;
 	}

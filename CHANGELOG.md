@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 - Changelog format now adheres to Nextcloud requirements.
 - Improved exception logging.
+- Exception when retrieving cover file that doesn't exits.
 
 ## 0.0.5 - 2025-04-30
 

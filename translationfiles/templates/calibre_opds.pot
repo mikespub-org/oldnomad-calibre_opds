@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2023-10-12 14:30+0300\n"
+"POT-Creation-Date: 2025-05-19 19:16+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,32 +84,32 @@ msgstr ""
 msgid "Authors by prefix"
 msgstr ""
 
-#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:208
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:227
 #, php-format
 msgid "All books matching: /%1$s/"
 msgstr ""
 
-#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:215
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:230
 #, php-format
 msgid "All books by author: %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:225
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:236
 #, php-format
 msgid "All books by publisher: %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:235
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:240
 #, php-format
 msgid "All books in language: %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:242
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:244
 #, php-format
 msgid "All books in series: %1$s"
 msgstr ""
 
-#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:249
+#: /home/alec/workspace/calibre_opds/lib/Controller/OpdsController.php:248
 #, php-format
 msgid "All books with tag: %1$s"
 msgstr ""
@@ -128,12 +128,12 @@ msgid ""
 "Search books with matching titles, descriptions, authors, series, or tags."
 msgstr ""
 
-#: /home/alec/workspace/calibre_opds/lib/FeedBuilder/OpdsFeedBuilder.php:78
+#: /home/alec/workspace/calibre_opds/lib/FeedBuilder/OpdsFeedBuilder.php:85
 #, php-format
 msgid "Authors: %1$d"
 msgstr ""
 
-#: /home/alec/workspace/calibre_opds/lib/FeedBuilder/OpdsFeedBuilder.php:86
+#: /home/alec/workspace/calibre_opds/lib/FeedBuilder/OpdsFeedBuilder.php:93
 #, php-format
 msgid "Books: %1$d"
 msgstr ""

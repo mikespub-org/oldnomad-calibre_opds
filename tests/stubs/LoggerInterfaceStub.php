@@ -12,8 +12,21 @@ use Psr\Log\LogLevel;
 trait LoggerInterfaceStub {
 	protected LoggerInterface $logger;
 
+	protected ?array $expectMessage = null;
+
 	private function emulateLog($level, $message, array $context) {
-		error_log($level . ':' . $message . ':' . var_export($context, true));
+		$msg = $level . ': ' . $message . ' ' . json_encode($context, JSON_PRETTY_PRINT);
+		if (is_null($this->expectMessage)) {
+			$this->fail('Unexpected message: ' . $msg);
+		}
+		if (array_key_exists('level', $this->expectMessage)) {
+			$this->assertEquals($this->expectMessage['level'], $level, 'Unexpected message level: ' . $msg);
+		}
+		if (array_key_exists('msg', $this->expectMessage)) {
+			$this->assertEquals($this->expectMessage['msg'], $message, 'Unexpected message text: ' . $msg);
+		}
+		$this->assertTrue(true);
+		$this->expectMessage = null;
 	}
 
 	protected function initLoggerInterface(): void {

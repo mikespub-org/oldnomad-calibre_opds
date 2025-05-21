@@ -26,17 +26,18 @@ class OpdsControllerTest extends TestCase {
 	use TestDataStub;
 
 	private OpdsController $controller;
+	private object $calibreService;
 
 	public function setUp(): void {
 		$this->initSettingsService();
 		$this->initL10N();
 		$this->initLoggerInterface();
 		$this->initTestData();
-		$calibreService = $this->createStub(ICalibreService::class);
-		$calibreService->method('getDatabase')->willReturn($this->dataDb);
+		$this->calibreService = $this->createStub(ICalibreService::class);
+		$this->calibreService->method('getDatabase')->willReturn($this->dataDb);
 		$this->controller = new OpdsController(
 			$this->getMockBuilder(\OCP\IRequest::class)->disableOriginalConstructor()->getMock(),
-			$calibreService,
+			$this->calibreService,
 			new OpdsFeedService($this->settings, $this->l),
 			$this->settings,
 			$this->l,
@@ -49,7 +50,7 @@ class OpdsControllerTest extends TestCase {
 		$response = $this->controller->index();
 		$this->assertNotNull($response, 'Null controller response');
 		$this->assertEquals(Http::STATUS_UNAUTHORIZED, $response->getStatus(), 'Wrong HTTP status');
-		/* -- Headers cannot be tested since `Response` uses `\OC::$server` in `getHeaders()`.
+		/* NOTE: Headers cannot be tested since `Response` uses `\OC::$server` in `getHeaders()`.
 		$headers = $response->getHeaders();
 		$this->assertArrayHasKey('WWW-Authenticate', $headers, 'Missing WWW-Authenticate header');
 		$this->assertEquals('Basic realm="Nextcloud authentication needed"', $headers['WWW-Authenticate'], 'Wrong WWW-Authenticate header');
@@ -85,6 +86,20 @@ class OpdsControllerTest extends TestCase {
 		$this->assertNotNull($response, 'Null controller response');
 		$this->assertEquals(Http::STATUS_OK, $response->getStatus(), 'Wrong HTTP status');
 		$this->assertInstanceOf($respClass, $response, 'Wrong response class');
+	}
+
+	public function testException(): void {
+		$this->setUpDoc();
+		$this->calibreService->method('getDatabase')->willReturnCallback(function ($path) {
+			throw new Exception('Test exception');
+		});
+		$this->expectMessage = [
+			'level' => 'error',
+			'msg' => 'Exception in index',
+		];
+		$response = $this->controller->index();
+		$this->assertNotNull($response, 'Null controller response');
+		$this->assertEquals(Http::STATUS_INTERNAL_SERVER_ERROR, $response->getStatus(), 'Wrong HTTP status');
 	}
 
 	public function testIndex(): void {

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Stubs;
 
 use OCA\Calibre2OPDS\Service\ISettingsService;
+use OCP\Files\Folder;
 
 trait SettingsServiceStub {
 	protected const SETTINGS_APP_ID = 'app-id';
@@ -15,6 +16,8 @@ trait SettingsServiceStub {
 	protected const SETTINGS_APP_WEBSITE = 'app-website';
 
 	protected ISettingsService $settings;
+	protected bool $loggedIn;
+	protected ?Folder $libraryFolder;
 
 	protected function initSettingsService(): void {
 		$settings = $this->createStub(ISettingsService::class);
@@ -31,6 +34,14 @@ trait SettingsServiceStub {
 		$settings->method('getLanguageName')->willReturnCallback(function (string $code) {
 			return '@' . $code;
 		});
+		$settings->method('getLibraryFolder')->willReturnCallback(function () {
+			return $this->libraryFolder;
+		});
+		$settings->method('isLoggedIn')->willReturnCallback(function () {
+			return $this->loggedIn;
+		});
 		$this->settings = $settings;
+		$this->loggedIn = false;
+		$this->libraryFolder = null;
 	}
 }

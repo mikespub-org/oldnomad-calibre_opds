@@ -34,4 +34,4 @@ OC.L10N.register(
     "Library root folder:" : "Categoria radicalis bibliothecae:",
     "Saved" : "Data servata sunt"
 },
-"");
+"nplurals=2; plural=(n != 1);");

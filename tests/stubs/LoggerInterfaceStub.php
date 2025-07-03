@@ -12,8 +12,21 @@ use Psr\Log\LogLevel;
 trait LoggerInterfaceStub {
 	protected LoggerInterface $logger;
 
+	protected ?array $expectMessage = null;
+
 	private function emulateLog($level, $message, array $context) {
-		error_log($level . ':' . $message);
+		$msg = $level . ': ' . $message . ' ' . json_encode($context, JSON_PRETTY_PRINT);
+		if (is_null($this->expectMessage)) {
+			$this->fail('Unexpected message: ' . $msg);
+		}
+		if (array_key_exists('level', $this->expectMessage)) {
+			$this->assertEquals($this->expectMessage['level'], $level, 'Unexpected message level: ' . $msg);
+		}
+		if (array_key_exists('msg', $this->expectMessage)) {
+			$this->assertEquals($this->expectMessage['msg'], $message, 'Unexpected message text: ' . $msg);
+		}
+		$this->assertTrue(true);
+		$this->expectMessage = null;
 	}
 
 	protected function initLoggerInterface(): void {
@@ -29,19 +42,19 @@ trait LoggerInterfaceStub {
 			fn ($message, array $context) => $this->emulateLog(LogLevel::CRITICAL, $message, $context)
 		);
 		$logger->method('error')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::ERROR, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::ERROR, $message, $context)
 		);
 		$logger->method('warning')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::WARNING, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::WARNING, $message, $context)
 		);
 		$logger->method('notice')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::NOTICE, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::NOTICE, $message, $context)
 		);
 		$logger->method('info')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::INFO, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::INFO, $message, $context)
 		);
 		$logger->method('debug')->willReturnCallback(
-			fn ($message, array $context) => $this->log(LogLevel::DEBUG, $message, $context)
+			fn ($message, array $context) => $this->emulateLog(LogLevel::DEBUG, $message, $context)
 		);
 		$this->logger = $logger;
 	}

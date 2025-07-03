@@ -13,6 +13,7 @@ use OCA\Calibre2OPDS\Util\MapAggregate;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
+use OCP\Files\NotFoundException;
 use PDOException;
 use Traversable;
 
@@ -109,7 +110,11 @@ class CalibreBook extends CalibreItem {
 		}
 		/** @var string $this->path */
 		$filename = $this->path . '/cover.jpg';
-		$data = $root->get($filename);
+		try {
+			$data = $root->get($filename);
+		} catch (NotFoundException $e) {
+			return null;
+		}
 		if (!$data->isReadable() || $data->getType() !== FileInfo::TYPE_FILE || !($data instanceof File)) {
 			return null;
 		}

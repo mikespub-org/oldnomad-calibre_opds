@@ -19,7 +19,7 @@ then
     echo "Version in appinfo/info.xml wasn't updated"
     exit 1
 fi
-CHLOG_HEADER=$(grep -F "## [$VER] - " CHANGELOG.md)
+CHLOG_HEADER=$(grep -F "## $VER - " CHANGELOG.md)
 if [ -z "$CHLOG_HEADER" ]
 then
     echo "Changelog section for version is missing"

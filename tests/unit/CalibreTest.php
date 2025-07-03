@@ -4,9 +4,7 @@ declare(strict_types=1);
 // SPDX-FileCopyrightText: 2023 Alec Kojaev <alec@kojaev.name>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-use OCA\Calibre2OPDS\Calibre\CalibreDB;
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
-use OCA\Calibre2OPDS\Calibre\ICalibreDB;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthor;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthorPrefix;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreBook;
@@ -17,39 +15,15 @@ use OCA\Calibre2OPDS\Calibre\Types\CalibrePublisher;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreSeries;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreTag;
 use OCP\Files\File;
-use OCP\Files\Folder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Stubs\StorageStub;
+use Stubs\TestDataStub;
 
 class CalibreTest extends TestCase {
-	use StorageStub;
-
-	protected ICalibreDB $db;
-	protected Folder $root;
+	use TestDataStub;
 
 	public function setUp(): void {
-		$this->initStorage(':memory:', true); // Trick to force an in-memory database
-		$this->root = $this->createFolderNode('.', [
-			$this->createFileNode('metadata.db'),
-			$this->createFolderNode('dummies_cicero', [
-				$this->createFileNode('cover.jpg'),
-				$this->createFileNode('cicero_for_dummies.epub'),
-				$this->createFileNode('cicero_for_dummies.fb2', false),
-			]),
-			$this->createFolderNode('whores_eroticon6', [
-				$this->createFileNode('cover.jpg', false),
-			]),
-		]);
-
-		/** @var CalibreDB */
-		$this->db = CalibreDB::fromFolder($this->root, false);
-		$pdo = $this->db->getDatabase();
-
-		$ddl = file_get_contents(__DIR__ . '/../files/metadata.sql');
-		$pdo->exec($ddl);
-		$ddl = file_get_contents(__DIR__ . '/../files/test-data.sql');
-		$pdo->exec($ddl);
+		$this->initTestData();
 	}
 
 	private function checkDataItem(?array $expected, ?CalibreItem $actual, string $message): void {
@@ -89,7 +63,7 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testAuthorsAll(): void {
-		$authors = CalibreAuthor::getByPrefix($this->db);
+		$authors = CalibreAuthor::getByPrefix($this->dataDb);
 		$this->checkData([
 			[ 'id' => 53, 'name' => 'Emmanuel Goldstein', 'uri' => '', 'count' => 1 ],
 			[ 'id' => 54, 'name' => 'Conrad Trachtenberg', 'uri' => '', 'count' => 1 ],
@@ -99,14 +73,14 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testAuthorsByPrefix(): void {
-		$authors = CalibreAuthor::getByPrefix($this->db, 'W');
+		$authors = CalibreAuthor::getByPrefix($this->dataDb, 'W');
 		$this->checkData([
 			[ 'id' => 52 ],
 		], $authors, 'Authors by prefix');
 	}
 
 	public function testAuthorsByBook(): void {
-		$authors = CalibreAuthor::getByBook($this->db, 12);
+		$authors = CalibreAuthor::getByBook($this->dataDb, 12);
 		$this->checkData([
 			[ 'id' => 54 ],
 			[ 'id' => 52 ],
@@ -114,12 +88,12 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testAuthorById(): void {
-		$author = CalibreAuthor::getById($this->db, 53);
+		$author = CalibreAuthor::getById($this->dataDb, 53);
 		$this->checkDataItem([ 'id' => 53 ], $author, 'Author by id');
 	}
 
 	public function testAuthorPrefixes(): void {
-		$prefixes = CalibreAuthorPrefix::getAll($this->db);
+		$prefixes = CalibreAuthorPrefix::getAll($this->dataDb);
 		$this->checkData([
 			[ 'prefix' => 'G', 'id' => 'G', 'name' => 'G', 'count' => 1 ],
 			[ 'prefix' => 'T', 'id' => 'T', 'name' => 'T', 'count' => 1 ],
@@ -129,7 +103,7 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testLanguagesAll(): void {
-		$languages = CalibreLanguage::getAll($this->db);
+		$languages = CalibreLanguage::getAll($this->dataDb);
 		$this->checkData([
 			[ 'id' => 71, 'code' => 'en', 'count' => 2 ],
 			[ 'id' => 74, 'code' => 'enm', 'count' => 0 ],
@@ -140,7 +114,7 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testLanguagesByBook(): void {
-		$languages = CalibreLanguage::getByBook($this->db, 12);
+		$languages = CalibreLanguage::getByBook($this->dataDb, 12);
 		$this->checkData([
 			[ 'code' => 'en' ],
 			[ 'code' => 'la' ],
@@ -148,12 +122,12 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testLanguageById(): void {
-		$language = CalibreLanguage::getById($this->db, 75);
+		$language = CalibreLanguage::getById($this->dataDb, 75);
 		$this->checkDataItem([ 'code' => 'la' ], $language, 'Language by id');
 	}
 
 	public function testPublishersAll(): void {
-		$publishers = CalibrePublisher::getAll($this->db);
+		$publishers = CalibrePublisher::getAll($this->dataDb);
 		$this->checkData([
 			[ 'id' => 92, 'name' => 'Big Brother Books', 'count' => 1 ],
 			[ 'id' => 91, 'name' => 'Megadodo Publications', 'count' => 1 ],
@@ -161,38 +135,38 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testPublishersByBook(): void {
-		$publishers = CalibrePublisher::getByBook($this->db, 13);
+		$publishers = CalibrePublisher::getByBook($this->dataDb, 13);
 		$this->checkData([
 			[ 'name' => 'Megadodo Publications' ]
 		], $publishers, 'Publishers by book');
 	}
 
 	public function testPublisherById(): void {
-		$publisher = CalibrePublisher::getById($this->db, 92);
+		$publisher = CalibrePublisher::getById($this->dataDb, 92);
 		$this->checkDataItem([ 'name' => 'Big Brother Books' ], $publisher, 'Publisher by id');
 	}
 
 	public function testSeriesAll(): void {
-		$series = CalibreSeries::getAll($this->db);
+		$series = CalibreSeries::getAll($this->dataDb);
 		$this->checkData([
 			[ 'id' => 111, 'name' => 'Philosophy For Dummies', 'count' => 2 ],
 		], $series, 'Series (all)');
 	}
 
 	public function testSeriesByBook(): void {
-		$series = CalibreSeries::getByBook($this->db, 12);
+		$series = CalibreSeries::getByBook($this->dataDb, 12);
 		$this->checkData([
 			[ 'name' => 'Philosophy For Dummies' ],
 		], $series, 'Series by book');
 	}
 
 	public function testSeriesById(): void {
-		$series = CalibreSeries::getById($this->db, 111);
+		$series = CalibreSeries::getById($this->dataDb, 111);
 		$this->checkDataItem([ 'name' => 'Philosophy For Dummies' ], $series, 'Series by id');
 	}
 
 	public function testTagsAll(): void {
-		$tags = CalibreTag::getAll($this->db);
+		$tags = CalibreTag::getAll($this->dataDb);
 		$this->checkData([
 			[ 'id' => 131, 'name' => 'Political theory', 'count' => 2 ],
 			[ 'id' => 132, 'name' => 'Translations', 'count' => 1 ],
@@ -200,7 +174,7 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testTagsByBook(): void {
-		$tags = CalibreTag::getByBook($this->db, 12);
+		$tags = CalibreTag::getByBook($this->dataDb, 12);
 		$this->checkData([
 			[ 'id' => 131 ],
 			[ 'id' => 132 ],
@@ -208,12 +182,12 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testTagById(): void {
-		$tag = CalibreTag::getById($this->db, 131);
+		$tag = CalibreTag::getById($this->dataDb, 131);
 		$this->checkDataItem([ 'name' => 'Political theory' ], $tag, 'Tag by id');
 	}
 
 	public function testBookById(): void {
-		$book = CalibreBook::getById($this->db, 12);
+		$book = CalibreBook::getById($this->dataDb, 12);
 		$this->checkDataItem([
 			'id' => 12,
 			'title' => 'Cicero for Dummies',
@@ -251,36 +225,36 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testBookCover(): void {
-		$book = CalibreBook::getById($this->db, 12);
-		$coverFile = $book->getCoverFile($this->root);
+		$book = CalibreBook::getById($this->dataDb, 12);
+		$coverFile = $book->getCoverFile($this->dataRoot);
 		$this->assertInstanceOf(File::class, $coverFile, 'Book cover file -- class');
 		$this->assertEquals('/./dummies_cicero/cover.jpg', $coverFile->getInternalPath(), 'Book cover file -- path');
 
-		$book = CalibreBook::getById($this->db, 11);
-		$coverFile = $book->getCoverFile($this->root);
+		$book = CalibreBook::getById($this->dataDb, 11);
+		$coverFile = $book->getCoverFile($this->dataRoot);
 		$this->assertNull($coverFile, 'Book cover file -- no cover');
 
-		$book = CalibreBook::getById($this->db, 13);
-		$coverFile = $book->getCoverFile($this->root);
+		$book = CalibreBook::getById($this->dataDb, 13);
+		$coverFile = $book->getCoverFile($this->dataRoot);
 		$this->assertNull($coverFile, 'Book cover file -- unreadable');
 	}
 
 	public function testBookData(): void {
-		$format = CalibreBookFormat::getByBookAndType($this->db, 12, 'epub');
+		$format = CalibreBookFormat::getByBookAndType($this->dataDb, 12, 'epub');
 		$this->checkDataItem([
 			'format' => 'EPUB', 'name' => 'cicero_for_dummies', 'path' => 'dummies_cicero'
 		], $format, 'Book data by book and format');
-		$dataFile = $format->getDataFile($this->root);
+		$dataFile = $format->getDataFile($this->dataRoot);
 		$this->assertInstanceOf(File::class, $dataFile, 'Book data file -- class');
 		$this->assertEquals('/./dummies_cicero/cicero_for_dummies.epub', $dataFile->getInternalPath(), 'Book data file -- path');
 
-		$format = CalibreBookFormat::getByBookAndType($this->db, 12, 'fb2');
-		$dataFile = $format->getDataFile($this->root);
+		$format = CalibreBookFormat::getByBookAndType($this->dataDb, 12, 'fb2');
+		$dataFile = $format->getDataFile($this->dataRoot);
 		$this->assertNull($dataFile, 'Book data file -- unreadable');
 	}
 
 	public function testBooksAll(): void {
-		$books = CalibreBook::getByCriterion($this->db);
+		$books = CalibreBook::getByCriterion($this->dataDb);
 		$this->checkData([
 			[
 				'id' => 12, 'title' => 'Cicero for Dummies',
@@ -332,7 +306,7 @@ class CalibreTest extends TestCase {
 
 	#[DataProvider('selectDataProvider')]
 	public function testBooksSelect(CalibreBookCriteria $criterion, string $id, array $expected, string $type): void {
-		$books = CalibreBook::getByCriterion($this->db, $criterion, $id);
+		$books = CalibreBook::getByCriterion($this->dataDb, $criterion, $id);
 		$this->checkData($expected, $books, 'Books by ' . $type);
 	}
 
@@ -360,12 +334,12 @@ class CalibreTest extends TestCase {
 
 	#[DataProvider('searchDataProvider')]
 	public function testBooksSearch(CalibreBookCriteria $criterion, string $term, array $expected, string $type): void {
-		$books = CalibreBook::getByCriterion($this->db, $criterion, $term);
+		$books = CalibreBook::getByCriterion($this->dataDb, $criterion, $term);
 		$this->checkData($expected, $books, 'Books search (' . $type . ')');
 	}
 
 	public function testUnknownPropertyError(): void {
-		$author = CalibreAuthor::getById($this->db, 53);
+		$author = CalibreAuthor::getById($this->dataDb, 53);
 		// NOTE: PHPUnit 10 no longer supports expecting errors.
 		set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {
 			restore_error_handler();
@@ -377,7 +351,7 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testUnknownPropertyIsNull(): void {
-		$author = CalibreAuthor::getById($this->db, 53);
+		$author = CalibreAuthor::getById($this->dataDb, 53);
 		// NOTE: PHPUnit 10 no longer supports expecting errors.
 		set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {
 			restore_error_handler();
@@ -387,7 +361,7 @@ class CalibreTest extends TestCase {
 	}
 
 	public function testPropertyIsSet(): void {
-		$author = CalibreAuthor::getById($this->db, 53);
+		$author = CalibreAuthor::getById($this->dataDb, 53);
 		$this->assertTrue(isset($author->id), 'Known property is set');
 		$this->assertFalse(isset($author->nonexistent_field), 'Unknown property is unset');
 	}

@@ -35,6 +35,10 @@
                     "type": "file"
                 }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/mikespub-org/nextcloud-app-tester"
         }
     ],
     "require-dev": {
@@ -43,7 +47,8 @@
         "nextcloud/translationtool": "^0-dev",
         "php-parallel-lint/php-parallel-lint": "^1",
         "psalm/phar": "^5",
-        "phpunit/phpunit": "^10"
+        "phpunit/phpunit": "^10",
+        "mikespub/nextcloud-app-tester": "dev-main"
     },
     "scripts": {
         "cs": "php-cs-fixer fix --using-cache=no --dry-run --diff --show-progress=dots",

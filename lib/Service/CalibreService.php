@@ -10,7 +10,8 @@ use OCA\Calibre2OPDS\Calibre\CalibreDB;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
 use OCP\Files\Folder;
 
-class CalibreService implements ICalibreService {
+final class CalibreService implements ICalibreService {
+	#[\Override]
 	public function getDatabase(Folder $root): ICalibreDB {
 		return CalibreDB::fromFolder($root);
 	}

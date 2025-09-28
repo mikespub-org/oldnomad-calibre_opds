@@ -14,8 +14,13 @@ use Traversable;
 
 /**
  * Class for Calibre author prefix.
+ *
+ * @property string $id
+ * @property string $name
+ * @property string $prefix
+ * @property int $count
  */
-class CalibreAuthorPrefix extends CalibreItem {
+final class CalibreAuthorPrefix extends CalibreItem {
 	public const URI = 'author-prefix';
 
 	/**
@@ -36,6 +41,7 @@ class CalibreAuthorPrefix extends CalibreItem {
 		parent::__construct($db, $data);
 	}
 
+	#[\Override]
 	protected function mangle(ICalibreDB $db, array $data): array {
 		/** @var string $data['prefix'] */
 		$data['id'] = $data['prefix'];

@@ -23,7 +23,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Service for managing user settings for this app.
  */
-class SettingsService implements ISettingsService {
+final class SettingsService implements ISettingsService {
 	/**
 	 * Default values for parameters.
 	 *
@@ -66,38 +66,46 @@ class SettingsService implements ISettingsService {
 		return $this->appInfo;
 	}
 
+	#[\Override]
 	public function getAppId(): string {
 		return Application::APP_ID;
 	}
 
+	#[\Override]
 	public function getAppVersion(): string {
 		/** @var string */
 		return $this->getAppInfo()['version'];
 	}
 
+	#[\Override]
 	public function getAppName(): string {
 		/** @var string */
 		return $this->getAppInfo()['name'];
 	}
 
+	#[\Override]
 	public function getAppWebsite(): string {
 		/** @var string */
 		return $this->getAppInfo()['website'];
 	}
 
+	#[\Override]
 	public function getAppRouteLink(string $route, array $parameters = []): string {
 		return $this->urlGenerator->linkToRoute(Application::APP_ID . '.opds.' . $route, $parameters);
 	}
 
+	#[\Override]
 	public function getAppImageLink(string $path): string {
 		return $this->urlGenerator->imagePath(Application::APP_ID, $path);
 	}
 
+	#[\Override]
 	public function getLanguageName(string $code): string {
 		$pref_lang = $this->l->getLocaleCode();
 		return locale_get_display_name($code, $pref_lang) ?: '@' . $code;
 	}
 
+	#[\Override]
 	public function getSettings(): array {
 		$user = $this->userSession->getUser();
 		if (is_null($user)) {
@@ -108,6 +116,7 @@ class SettingsService implements ISettingsService {
 		return array_combine($keys, array_map(fn ($k) => $this->config->getUserValue($uid, Application::APP_ID, $k, self::DEFAULTS[$k]), $keys));
 	}
 
+	#[\Override]
 	public function getLibraryFolder(): ?Folder {
 		$user = $this->userSession->getUser();
 		$libPath = $this->getLibrary();
@@ -126,6 +135,7 @@ class SettingsService implements ISettingsService {
 		}
 	}
 
+	#[\Override]
 	public function getLibrary(): ?string {
 		$user = $this->userSession->getUser();
 		if (is_null($user)) {
@@ -134,6 +144,7 @@ class SettingsService implements ISettingsService {
 		return $this->config->getUserValue($user->getUID(), Application::APP_ID, 'library', self::DEFAULTS['library']);
 	}
 
+	#[\Override]
 	public function setLibrary(string $libraryRoot): bool {
 		$user = $this->userSession->getUser();
 		if (is_null($user)) {
@@ -143,6 +154,7 @@ class SettingsService implements ISettingsService {
 		return true;
 	}
 
+	#[\Override]
 	public function isLoggedIn(): bool {
 		$user = $this->userSession->getUser();
 		return !is_null($user);

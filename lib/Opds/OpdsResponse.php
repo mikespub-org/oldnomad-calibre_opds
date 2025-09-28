@@ -9,6 +9,7 @@ namespace OCA\Calibre2OPDS\Opds;
 use ArrayIterator;
 use DateTimeImmutable;
 use DateTimeInterface;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Response;
 use Traversable;
 use XMLWriter;
@@ -16,9 +17,9 @@ use XMLWriter;
 /**
  * Implementation of OPDS feed response for Nextcloud.
  *
- * @template-extends Response<int, array<string, mixed>>
+ * @template-extends Response<Http::STATUS_*, array<string, mixed>>
  */
-class OpdsResponse extends Response {
+final class OpdsResponse extends Response {
 	/**
 	 * Atom/OPDS feed MIME type.
 	 */
@@ -216,6 +217,7 @@ class OpdsResponse extends Response {
 		$xml->endElement();
 	}
 
+	#[\Override]
 	public function render(): string {
 		$xml = new XMLWriter();
 		$xml->openMemory();

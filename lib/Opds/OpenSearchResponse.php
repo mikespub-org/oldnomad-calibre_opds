@@ -6,15 +6,16 @@ declare(strict_types=1);
 
 namespace OCA\Calibre2OPDS\Opds;
 
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Response;
 use XMLWriter;
 
 /**
  * Implementation of OpenSearch descriptor response for Nextcloud.
  *
- * @template-extends Response<int, array<string, mixed>>
+ * @template-extends Response<Http::STATUS_*, array<string, mixed>>
  */
-class OpenSearchResponse extends Response {
+final class OpenSearchResponse extends Response {
 	/**
 	 * OpenSearch MIME type.
 	 */
@@ -43,6 +44,7 @@ class OpenSearchResponse extends Response {
 		parent::__construct();
 	}
 
+	#[\Override]
 	public function render(): string {
 		$xml = new XMLWriter();
 		$xml->openMemory();

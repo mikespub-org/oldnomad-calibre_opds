@@ -9,7 +9,7 @@ namespace OCA\Calibre2OPDS\Opds;
 /**
  * Container for application attributes used by OPDS feed.
  */
-class OpdsApp {
+final class OpdsApp {
 	/**
 	 * Construct an instance.
 	 *

@@ -21,7 +21,7 @@ use Traversable;
  * @template TValueInner
  * @implements IteratorAggregate<TKey,TValue>
  */
-class MapAggregate implements IteratorAggregate {
+final class MapAggregate implements IteratorAggregate {
 	/**
 	 * Inner iterator.
 	 *
@@ -81,6 +81,7 @@ class MapAggregate implements IteratorAggregate {
 		}
 	}
 
+	#[\Override]
 	public function getIterator(): Traversable {
 		return $this->cache;
 	}

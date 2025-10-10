@@ -14,8 +14,12 @@ use Traversable;
 
 /**
  * Class for Calibre tag entry.
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $count
  */
-class CalibreTag extends CalibreItem {
+final class CalibreTag extends CalibreItem {
 	public const URI = 'tag';
 	public const CRITERION = CalibreBookCriteria::TAG;
 

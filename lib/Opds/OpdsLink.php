@@ -9,7 +9,7 @@ namespace OCA\Calibre2OPDS\Opds;
 /**
  * Container for Atom link tag.
  */
-class OpdsLink {
+final class OpdsLink {
 	/**
 	 * Construct an instance.
 	 *

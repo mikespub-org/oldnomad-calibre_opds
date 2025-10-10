@@ -18,17 +18,19 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use Psr\Container\ContainerInterface;
 
-class Application extends App implements IBootstrap {
+final class Application extends App implements IBootstrap {
 	public const APP_ID = 'calibre_opds';
 
 	public function __construct() {
 		parent::__construct(self::APP_ID);
 	}
 
+	#[\Override]
 	public function boot(IBootContext $context): void {
 		// Nothing to do
 	}
 
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 

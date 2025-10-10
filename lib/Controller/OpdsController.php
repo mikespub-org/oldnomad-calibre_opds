@@ -34,7 +34,7 @@ use OCP\IL10N;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
-class OpdsController extends Controller {
+final class OpdsController extends Controller {
 	private const DEFAULT_PREFIX_LENGTH = 1;
 
 	private ICalibreService $calibre;
@@ -215,10 +215,9 @@ class OpdsController extends Controller {
 					return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
 				}
 				if ($critCase === CalibreBookCriteria::LANGUAGE) {
-					/** @var string $refItem->code */
+					/** @var CalibreLanguage $refItem */
 					$refName = $this->settings->getLanguageName($refItem->code);
 				} else {
-					/** @var string $refItem->name */
 					$refName = $refItem->name;
 				}
 			}
@@ -227,9 +226,9 @@ class OpdsController extends Controller {
 					$title = $this->l->t('All books matching: /%1$s/', [$refName]);
 					break;
 				case CalibreBookCriteria::AUTHOR:
+					/** @var CalibreAuthor $refItem */
 					$title = $this->l->t('All books by author: %1$s', [$refName]);
 					$upRoute = 'authors';
-					/** @var string $refItem->sort */
 					$upParams = [ 'prefix' => substr($refItem->sort, 0, intval(self::DEFAULT_PREFIX_LENGTH)) ];
 					break;
 				case CalibreBookCriteria::PUBLISHER:

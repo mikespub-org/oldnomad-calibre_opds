@@ -17,8 +17,12 @@ use Traversable;
 
 /**
  * Class for Calibre book data entry.
+ *
+ * @property string $path
+ * @property string $name
+ * @property string $format
  */
-class CalibreBookFormat extends CalibreItem {
+final class CalibreBookFormat extends CalibreItem {
 	public const URI = 'book-format';
 
 	/**
@@ -46,11 +50,6 @@ class CalibreBookFormat extends CalibreItem {
 	 * @return File|null data file, or `null` if doesn't exist.
 	 */
 	public function getDataFile(Folder $root): ?File {
-		/**
-		 * @var string $this->path
-		 * @var string $this->name
-		 * @var string $this->format
-		 */
 		$filename = $this->path . '/' . $this->name . '.' . strtolower($this->format);
 		$data = $root->get($filename);
 		if (!$data->isReadable() || $data->getType() !== FileInfo::TYPE_FILE || !($data instanceof File)) {

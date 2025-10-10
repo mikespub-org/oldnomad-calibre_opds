@@ -9,7 +9,7 @@ namespace OCA\Calibre2OPDS\Opds;
 /**
  * Container for Atom entry category.
  */
-class OpdsCategory {
+final class OpdsCategory {
 	/**
 	 * Construct an instance.
 	 *

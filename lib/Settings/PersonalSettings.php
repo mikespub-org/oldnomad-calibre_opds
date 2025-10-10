@@ -10,21 +10,24 @@ use OCA\Calibre2OPDS\Service\ISettingsService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 
-class PersonalSettings implements ISettings {
+final class PersonalSettings implements ISettings {
 	public function __construct(
 		private ISettingsService $settings,
 	) {
 	}
 
+	#[\Override]
 	public function getForm(): TemplateResponse {
 		$data = $this->settings->getSettings();
 		return new TemplateResponse($this->settings->getAppId(), 'settings.personal', $data);
 	}
 
+	#[\Override]
 	public function getSection(): string {
 		return 'sharing';
 	}
 
+	#[\Override]
 	public function getPriority(): int {
 		return 90;
 	}

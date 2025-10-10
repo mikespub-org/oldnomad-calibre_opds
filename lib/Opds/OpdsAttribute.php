@@ -17,7 +17,7 @@ use DateTimeInterface;
  * Tag contents can be passed either as a scalar (e.g. a string or an integer),
  * or as an object implementing `DateTimeInterface` for timestamps.
  */
-class OpdsAttribute {
+final class OpdsAttribute {
 	/**
 	 * Construct an instance.
 	 *

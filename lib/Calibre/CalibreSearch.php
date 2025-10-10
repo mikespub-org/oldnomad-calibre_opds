@@ -7,15 +7,12 @@ declare(strict_types=1);
 namespace OCA\Calibre2OPDS\Calibre;
 
 use Normalizer;
-use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthor;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreBook;
-use OCA\Calibre2OPDS\Calibre\Types\CalibreSeries;
-use OCA\Calibre2OPDS\Calibre\Types\CalibreTag;
 
 /**
  * Search implementation.
  */
-class CalibreSearch {
+final class CalibreSearch {
 	/**
 	 * Default Unicode form used for search.
 	 */
@@ -38,9 +35,16 @@ class CalibreSearch {
 	 * @return string text without diacritics.
 	 */
 	private static function removeDiacritics(string $text): string {
-		$text = normalizer_normalize($text, Normalizer::NFD);
-		$text = preg_replace('/[\p{M}]/u', '', $text);
-		return normalizer_normalize($text, self::DEFAULT_FORM);
+		$result = normalizer_normalize($text, Normalizer::NFD);
+		if ($result === false) {
+			return $text;
+		}
+		$result = preg_replace('/[\p{M}]/u', '', $result);
+		if (is_null($result)) {
+			return $text;
+		}
+		$result = normalizer_normalize($result, self::DEFAULT_FORM);
+		return ($result === false) ? $text : $result;
 	}
 
 	/**
@@ -55,8 +59,11 @@ class CalibreSearch {
 		if (!is_string($text) || $text === '') {
 			return;
 		}
-		$text = normalizer_normalize($text, self::DEFAULT_FORM);
-		array_push($haystack, $text);
+		$textNorm = normalizer_normalize($text, self::DEFAULT_FORM);
+		if ($textNorm === false) {
+			$textNorm = $text;
+		}
+		array_push($haystack, $textNorm);
 		$textNoMarks = self::removeDiacritics($text);
 		if ($textNoMarks !== $text) {
 			// Search with diacritics removed
@@ -74,15 +81,12 @@ class CalibreSearch {
 		$haystack = [];
 		self::appendHaystack($haystack, $item->title);
 		self::appendHaystack($haystack, $item->comment);
-		/** @var CalibreAuthor $author */
 		foreach ($item->authors as $author) {
 			self::appendHaystack($haystack, $author->name);
 		}
-		/** @var CalibreSeries $series */
 		foreach ($item->series as $series) {
 			self::appendHaystack($haystack, $series->name);
 		}
-		/** @var CalibreTag $tag */
 		foreach ($item->tags as $tag) {
 			self::appendHaystack($haystack, $tag->name);
 		}
@@ -102,7 +106,11 @@ class CalibreSearch {
 			return null;
 		}
 		$dataEsc = str_replace('/', '\/', $terms);
-		return '/' . normalizer_normalize($dataEsc, self::DEFAULT_FORM) . '/inS';
+		$dataNorm = normalizer_normalize($dataEsc, self::DEFAULT_FORM);
+		if ($dataNorm === false) {
+			$dataNorm = $dataEsc;
+		}
+		return '/' . $dataNorm . '/inS';
 	}
 
 	/**

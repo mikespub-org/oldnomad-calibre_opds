@@ -202,37 +202,37 @@ class OpdsControllerTest extends TestCase {
 		$this->assertEquals('opds:books', $xml->xpath('atom:id')[0]);
 		$this->assertEquals('app-route:books?', $xml->xpath('atom:link[@rel=\'self\']/@href')[0]);
 		// TODO: Test nav items, here and below
-	
+
 		$response = $this->controller->books(CalibreBookCriteria::SEARCH->value, 'a*');
 		$this->commonTestDoc($response);
 		$xml = self::loadXmlDoc($response, 'atom');
 		$this->assertEquals('opds:books', $xml->xpath('atom:id')[0]);
 		$this->assertEquals('app-route:books?', $xml->xpath('atom:link[@rel=\'self\']/@href')[0]);
-	
+
 		$response = $this->controller->books(CalibreBookCriteria::AUTHOR->value, '52');
 		$this->commonTestDoc($response);
 		$xml = self::loadXmlDoc($response, 'atom');
 		$this->assertEquals('opds:books', $xml->xpath('atom:id')[0]);
 		$this->assertEquals('app-route:books?', $xml->xpath('atom:link[@rel=\'self\']/@href')[0]);
-	
+
 		$response = $this->controller->books(CalibreBookCriteria::PUBLISHER->value, '91');
 		$this->commonTestDoc($response);
 		$xml = self::loadXmlDoc($response, 'atom');
 		$this->assertEquals('opds:books', $xml->xpath('atom:id')[0]);
 		$this->assertEquals('app-route:books?', $xml->xpath('atom:link[@rel=\'self\']/@href')[0]);
-	
+
 		$response = $this->controller->books(CalibreBookCriteria::LANGUAGE->value, '74');
 		$this->commonTestDoc($response);
 		$xml = self::loadXmlDoc($response, 'atom');
 		$this->assertEquals('opds:books', $xml->xpath('atom:id')[0]);
 		$this->assertEquals('app-route:books?', $xml->xpath('atom:link[@rel=\'self\']/@href')[0]);
-	
+
 		$response = $this->controller->books(CalibreBookCriteria::SERIES->value, '111');
 		$this->commonTestDoc($response);
 		$xml = self::loadXmlDoc($response, 'atom');
 		$this->assertEquals('opds:books', $xml->xpath('atom:id')[0]);
 		$this->assertEquals('app-route:books?', $xml->xpath('atom:link[@rel=\'self\']/@href')[0]);
-	
+
 		$response = $this->controller->books(CalibreBookCriteria::TAG->value, '132');
 		$this->commonTestDoc($response);
 		$xml = self::loadXmlDoc($response, 'atom');

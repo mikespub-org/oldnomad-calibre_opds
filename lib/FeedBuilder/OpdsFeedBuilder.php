@@ -6,18 +6,12 @@ declare(strict_types=1);
 
 namespace OCA\Calibre2OPDS\FeedBuilder;
 
-use DateTimeInterface;
 use Exception;
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
-use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthor;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthorPrefix;
+use OCA\Calibre2OPDS\Calibre\Types\CalibreBook;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreBookCriteria;
-use OCA\Calibre2OPDS\Calibre\Types\CalibreBookFormat;
-use OCA\Calibre2OPDS\Calibre\Types\CalibreBookId;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreLanguage;
-use OCA\Calibre2OPDS\Calibre\Types\CalibrePublisher;
-use OCA\Calibre2OPDS\Calibre\Types\CalibreSeries;
-use OCA\Calibre2OPDS\Calibre\Types\CalibreTag;
 use OCA\Calibre2OPDS\Opds\OpdsApp;
 use OCA\Calibre2OPDS\Opds\OpdsAttribute;
 use OCA\Calibre2OPDS\Opds\OpdsAuthor;
@@ -30,7 +24,7 @@ use OCA\Calibre2OPDS\Service\ISettingsService;
 use OCA\Calibre2OPDS\Util\MimeTypes;
 use OCP\IL10N;
 
-class OpdsFeedBuilder implements IOpdsFeedBuilder {
+final class OpdsFeedBuilder implements IOpdsFeedBuilder {
 	private OpdsResponse $response;
 
 	public function __construct(
@@ -44,7 +38,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 	) {
 		unset($selfParams['_route']);
 		$id = $selfRoute;
-		/** @var scalar $value */
+		/** @var string $value */
 		foreach ($selfParams as $key => $value) {
 			$id .= ':' . $key . '=' . $value;
 		}
@@ -62,17 +56,14 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 		return new OpdsLink($rel, $this->settings->getAppRouteLink($route, $parameters), $mimeType ?? OpdsResponse::MIME_TYPE_ATOM);
 	}
 
+	#[\Override]
 	public function addSubsectionItem(string $id, string $route, string $title, ?string $summary): self {
 		$this->response->addEntry((new OpdsEntry($id, $title, $summary))->addLink($this->getRouteLink('subsection', null, $route)));
 		return $this;
 	}
 
+	#[\Override]
 	public function addNavigationEntry(CalibreItem $item): self {
-		/**
-		 * @var string|int $item->id
-		 * @var string $item->name
-		 * @var int $item->count
-		 */
 		$rel = 'subsection';
 		/** @var ?CalibreBookCriteria */
 		$criterion = $item::CRITERION;
@@ -85,7 +76,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 			$summary = $this->l->t('Authors: %1$d', [$item->count]);
 		} else {
 			if ($criterion === CalibreBookCriteria::LANGUAGE) {
-				/** @var string $item->code */
+				/** @var CalibreLanguage $item */
 				$item->setName($this->settings->getLanguageName($item->code));
 			}
 			$routeName = 'books';
@@ -100,16 +91,9 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 		return $this;
 	}
 
+	#[\Override]
 	public function addBookEntry(CalibreItem $item): self {
-		/**
-		 * @var int $item->id
-		 * @var string $item->title
-		 * @var ?string $item->comment
-		 * @var ?DateTimeInterface $item->last_modified
-		 * @var ?DateTimeInterface $item->pubdate
-		 * @var ?DateTimeInterface $item->timestamp
-		 * @var ?string $item->uuid
-		 */
+		/** @var CalibreBook $item */
 		$entry = new OpdsEntry('book:' . $item->id, $item->title, $item->comment);
 		$entry->setUpdated($item->last_modified);
 		if (!is_null($item->pubdate)) {
@@ -121,12 +105,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 		if (!is_null($item->uuid) && $item->uuid !== '') {
 			$entry->addAttribute(new OpdsAttribute('dc', 'identifier', 'urn:uuid:' . $item->uuid));
 		}
-		/** @var CalibreBookId $ident */
 		foreach ($item->identifiers as $ident) {
-			/**
-			 * @var string $ident->type
-			 * @var string $ident->value
-			 */
 			if (in_array($ident->type, OpdsResponse::LITERAL_IDENTIFIER_TYPES)) {
 				$value = $ident->value;
 			} else {
@@ -134,34 +113,21 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 			}
 			$entry->addAttribute(new OpdsAttribute('dc', 'identifier', $value));
 		}
-		/** @var CalibreAuthor $author */
 		foreach ($item->authors as $author) {
-			/**
-			 * @var string $author->name
-			 * @var ?string $author->uri
-			 */
 			$entry->addAuthor(new OpdsAuthor($author->name, $author->uri));
 		}
-		/** @var CalibrePublisher $publisher */
 		foreach ($item->publishers as $publisher) {
-			/** @var string $publisher->name */
 			$entry->addAttribute(new OpdsAttribute('dc', 'publisher', $publisher->name));
 		}
-		/** @var CalibreLanguage $lang */
 		foreach ($item->languages as $lang) {
-			/** @var string $lang->code */
 			$entry->addAttribute(new OpdsAttribute('dc', 'language', $lang->code));
 		}
-		/** @var CalibreSeries $series */
 		foreach ($item->series as $series) {
-			/** @var string $series->id */
 			$seriesUrl = $this->settings->getAppRouteLink('books', [ 'criterion' => 'series', 'id' => $series->id ]);
 			$entry->addAttribute(new OpdsAttribute('dc', 'isPartOf', $seriesUrl));
 		}
 		// TODO: series, series_index
-		/** @var CalibreTag $tag */
 		foreach ($item->tags as $tag) {
-			/** @var string $tag->name */
 			$entry->addCategory(new OpdsCategory($tag->name));
 		}
 		if ($item->has_cover) {
@@ -171,9 +137,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 				'book_cover', [ 'id' => $item->id ]
 			));
 		}
-		/** @var CalibreBookFormat $fmt */
 		foreach ($item->formats as $fmt) {
-			/** @var string $fmt->format */
 			$format = $fmt->format;
 			$entry->addLink($this->getRouteLink(
 				'http://opds-spec.org/acquisition',
@@ -185,6 +149,7 @@ class OpdsFeedBuilder implements IOpdsFeedBuilder {
 		return $this;
 	}
 
+	#[\Override]
 	public function getResponse(): OpdsResponse {
 		return $this->response;
 	}

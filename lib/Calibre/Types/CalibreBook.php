@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace OCA\Calibre2OPDS\Calibre\Types;
 
+use DateTimeInterface;
 use OCA\Calibre2OPDS\Calibre\CalibreItem;
 use OCA\Calibre2OPDS\Calibre\CalibreSearch;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
@@ -19,8 +20,26 @@ use Traversable;
 
 /**
  * Class for Calibre book entry.
+ *
+ * @property int $id
+ * @property string $title
+ * @property ?DateTimeInterface $timestamp
+ * @property ?DateTimeInterface $pubdate
+ * @property float $series_index
+ * @property ?string $uuid
+ * @property bool $has_cover
+ * @property ?DateTimeInterface $last_modified
+ * @property string $path
+ * @property string $comment
+ * @property Traversable<CalibreAuthor> $authors
+ * @property Traversable<CalibrePublisher> $publishers
+ * @property Traversable<CalibreLanguage> $languages
+ * @property Traversable<CalibreSeries> $series
+ * @property Traversable<CalibreTag> $tags
+ * @property Traversable<CalibreBookFormat> $formats
+ * @property Traversable<CalibreBookId> $identifiers
  */
-class CalibreBook extends CalibreItem {
+final class CalibreBook extends CalibreItem {
 	public const URI = 'book';
 
 	/**
@@ -79,6 +98,7 @@ class CalibreBook extends CalibreItem {
 		parent::__construct($db, $data);
 	}
 
+	#[\Override]
 	protected function mangle(ICalibreDB $db, array $data): array {
 		/** @var int */
 		$book_id = $data['id'];
@@ -108,7 +128,6 @@ class CalibreBook extends CalibreItem {
 		if (!$this->has_cover) {
 			return null;
 		}
-		/** @var string $this->path */
 		$filename = $this->path . '/cover.jpg';
 		try {
 			$data = $root->get($filename);

@@ -14,8 +14,14 @@ use Traversable;
 
 /**
  * Class for Calibre author entry.
+ *
+ * @property int $id
+ * @property string $name
+ * @property ?string $uri
+ * @property string $sort
+ * @property int $count
  */
-class CalibreAuthor extends CalibreItem {
+final class CalibreAuthor extends CalibreItem {
 	public const URI = 'author';
 	public const CRITERION = CalibreBookCriteria::AUTHOR;
 
@@ -40,6 +46,7 @@ class CalibreAuthor extends CalibreItem {
 		parent::__construct($db, $data);
 	}
 
+	#[\Override]
 	protected function mangle(ICalibreDB $db, array $data): array {
 		if ($data['uri'] === '') {
 			$data['uri'] = null;

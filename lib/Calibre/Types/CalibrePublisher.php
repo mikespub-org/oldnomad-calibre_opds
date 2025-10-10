@@ -14,8 +14,12 @@ use Traversable;
 
 /**
  * Class for Calibre publisher entry.
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $count
  */
-class CalibrePublisher extends CalibreItem {
+final class CalibrePublisher extends CalibreItem {
 	public const URI = 'publisher';
 	public const CRITERION = CalibreBookCriteria::PUBLISHER;
 

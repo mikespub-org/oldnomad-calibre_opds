@@ -14,8 +14,12 @@ use Traversable;
 
 /**
  * Class for Calibre series entry.
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $count
  */
-class CalibreSeries extends CalibreItem {
+final class CalibreSeries extends CalibreItem {
 	public const URI = 'series';
 	public const CRITERION = CalibreBookCriteria::SERIES;
 

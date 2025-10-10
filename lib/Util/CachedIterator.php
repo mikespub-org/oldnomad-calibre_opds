@@ -17,7 +17,7 @@ use Iterator;
  * @template TValue
  * @implements Iterator<TKey,TValue>
  */
-class CachedIterator implements Iterator {
+final class CachedIterator implements Iterator {
 	/**
 	 * Inner iterator.
 	 *
@@ -79,6 +79,7 @@ class CachedIterator implements Iterator {
 	/**
 	 * @return TValue
 	 */
+	#[\Override]
 	public function current(): mixed {
 		$entry = $this->entry($this->index);
 		return is_null($entry) ? null : $entry[1];
@@ -87,19 +88,23 @@ class CachedIterator implements Iterator {
 	/**
 	 * @return TKey
 	 */
+	#[\Override]
 	public function key(): mixed {
 		$entry = $this->entry($this->index);
 		return is_null($entry) ? null : $entry[0];
 	}
 
+	#[\Override]
 	public function next(): void {
 		$this->index++;
 	}
 
+	#[\Override]
 	public function rewind(): void {
 		$this->index = 0;
 	}
 
+	#[\Override]
 	public function valid(): bool {
 		return !is_null($this->entry($this->index));
 	}

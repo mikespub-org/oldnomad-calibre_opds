@@ -13,7 +13,7 @@ use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
 use UnexpectedValueException;
 
-class SettingsController extends Controller {
+final class SettingsController extends Controller {
 	public function __construct(
 		IRequest $request,
 		private ISettingsService $settings,

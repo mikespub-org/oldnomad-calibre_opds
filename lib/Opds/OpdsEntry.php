@@ -11,7 +11,7 @@ use DateTimeInterface;
 /**
  * Container for OPDS/Atom feed entry.
  */
-class OpdsEntry {
+final class OpdsEntry {
 	/**
 	 * Entry ID.
 	 */

@@ -16,7 +16,7 @@ use Traversable;
 /**
  * Class for Calibre database.
  */
-class CalibreDB implements ICalibreDB {
+final class CalibreDB implements ICalibreDB {
 	/**
 	 * Calibre database name.
 	 *
@@ -46,7 +46,7 @@ class CalibreDB implements ICalibreDB {
 		if (!$readOnly) {
 			// Following functions are used by some triggers
 			/** @psalm-suppress TooManyArguments -- Psalm is mistaken about PDO::sqliteCreateFunction() (has 4 args since 7.1.4) */
-			$this->database->sqliteCreateFunction('title_sort', function (string $name): string {
+			$this->database->sqliteCreateFunction('title_sort', function (string $name): ?string {
 				return preg_replace('/^(A|The|An)\s+(.*)$/i', '${2}, ${1}', $name, 1);
 			}, 1, PDO::SQLITE_DETERMINISTIC);
 			$this->database->sqliteCreateFunction('uuid4', function (): string {
@@ -101,6 +101,7 @@ class CalibreDB implements ICalibreDB {
 	 * @return Traversable<array> list of result rows (associative arrays).
 	 * @throws PDOException on failure.
 	 */
+	#[\Override]
 	public function query(string $sql, array $parameters = []): Traversable {
 		$stmt = $this->database->prepare($sql);
 		if (!$stmt->execute($parameters)) {
@@ -119,6 +120,7 @@ class CalibreDB implements ICalibreDB {
 	 * @return array<string,mixed>|null result row (associative array), or `null` if not found.
 	 * @throws PDOException on failure.
 	 */
+	#[\Override]
 	public function querySingle(string $sql, array $parameters = []): ?array {
 		$stmt = $this->database->prepare($sql);
 		if (!$stmt->execute($parameters)) {

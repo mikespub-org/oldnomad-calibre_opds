@@ -18,12 +18,4 @@
 	<extraFiles>
 		<directory name="vendor/nextcloud/ocp" />
 	</extraFiles>
-	<issueHandlers>
-        <UndefinedClass>
-            <errorLevel type="suppress">
-                <referencedClass name="OC" />
-            </errorLevel>
-        </UndefinedClass>
-        <MissingDependency errorLevel="suppress" />
-	</issueHandlers>
 </psalm>

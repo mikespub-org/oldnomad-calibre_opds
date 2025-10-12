@@ -12,6 +12,10 @@
             "email": "alec@kojaev.name"
         }
     ],
+    "support": {
+        "issues": "https://gitlab.com/oldnomad/calibre_opds/-/issues",
+        "source": "https://gitlab.com/oldnomad/calibre_opds"
+    },
     "autoload": {
         "psr-4": {
             "OCA\\Calibre2OPDS\\": "lib",
@@ -42,12 +46,12 @@
         }
     ],
     "require-dev": {
-        "nextcloud/ocp": "^29",
+        "nextcloud/ocp": "dev-master",
         "nextcloud/coding-standard": "^1",
         "nextcloud/translationtool": "^0-dev",
         "php-parallel-lint/php-parallel-lint": "^1",
-        "psalm/phar": "^5",
-        "phpunit/phpunit": "^10",
+        "psalm/phar": "^6",
+        "phpunit/phpunit": "^11",
         "mikespub/nextcloud-app-tester": "dev-main"
     },
     "scripts": {

@@ -14,8 +14,11 @@ use Traversable;
 
 /**
  * Class for Calibre book identifier entry.
+ *
+ * @property string $type
+ * @property string $value
  */
-class CalibreBookId extends CalibreItem {
+final class CalibreBookId extends CalibreItem {
 	public const URI = 'book-id';
 
 	/**

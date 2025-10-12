@@ -14,8 +14,13 @@ use Traversable;
 
 /**
  * Class for Calibre language entry.
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ * @property int $count
  */
-class CalibreLanguage extends CalibreItem {
+final class CalibreLanguage extends CalibreItem {
 	public const URI = 'lang';
 	public const CRITERION = CalibreBookCriteria::LANGUAGE;
 
@@ -38,6 +43,7 @@ class CalibreLanguage extends CalibreItem {
 		parent::__construct($db, $data);
 	}
 
+	#[\Override]
 	protected function mangle(ICalibreDB $db, array $data): array {
 		/** @var string $data['code'] */
 		$data['name'] = $data['code'];

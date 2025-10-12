@@ -12,6 +12,10 @@ use OCA\Calibre2OPDS\Calibre\Types\CalibreBookCriteria;
 
 /**
  * Base class for Calibre metadata items.
+ *
+ * @property int|string $id -- this and following properties are usually defined in subclasses
+ * @property string $name
+ * @property int $count
  */
 abstract class CalibreItem {
 	/**

@@ -9,7 +9,7 @@ namespace OCA\Calibre2OPDS\Opds;
 /**
  * Container for Atom author object.
  */
-class OpdsAuthor {
+final class OpdsAuthor {
 	/**
 	 * Construct an instance.
 	 *

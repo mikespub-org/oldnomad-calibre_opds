@@ -113,6 +113,7 @@ final class SettingsService implements ISettingsService {
 		}
 		$uid = $user->getUID();
 		$keys = array_keys(self::DEFAULTS);
+		/** @psalm-suppress DeprecatedMethod -- TODO IUserConfig */
 		return array_combine($keys, array_map(fn ($k) => $this->config->getUserValue($uid, Application::APP_ID, $k, self::DEFAULTS[$k]), $keys));
 	}
 
@@ -141,6 +142,7 @@ final class SettingsService implements ISettingsService {
 		if (is_null($user)) {
 			return null;
 		}
+		/** @psalm-suppress DeprecatedMethod -- TODO IUserConfig */
 		return $this->config->getUserValue($user->getUID(), Application::APP_ID, 'library', self::DEFAULTS['library']);
 	}
 
@@ -150,6 +152,7 @@ final class SettingsService implements ISettingsService {
 		if (is_null($user)) {
 			return false;
 		}
+		/** @psalm-suppress DeprecatedMethod -- TODO IUserConfig */
 		$this->config->setUserValue($user->getUID(), Application::APP_ID, 'library', $libraryRoot);
 		return true;
 	}

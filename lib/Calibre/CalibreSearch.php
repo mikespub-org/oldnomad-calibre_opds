@@ -91,7 +91,7 @@ final class CalibreSearch {
 			self::appendHaystack($haystack, $tag->name);
 		}
 		$match = preg_grep($this->pattern, $haystack);
-		/** @psalm-suppress RedundantConditionGivenDocblockType -- Psalm is mistaken about return type of preg_grep() */
+		/** @psalm-suppress RedundantConditionGivenDocblockType -- see <https://github.com/vimeo/psalm/issues/9543> */
 		return $match !== false && count($match) > 0;
 	}
 

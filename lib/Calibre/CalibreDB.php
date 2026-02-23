@@ -45,7 +45,7 @@ final class CalibreDB implements ICalibreDB {
 		$this->database = new PDO('sqlite:' . $dsn, null, null, $attr);
 		if (!$readOnly) {
 			// Following functions are used by some triggers
-			/** @psalm-suppress TooManyArguments -- Psalm is mistaken about PDO::sqliteCreateFunction() (has 4 args since 7.1.4) */
+			/** @psalm-suppress TooManyArguments -- should be fixed once <https://github.com/vimeo/psalm/pull/11591> is backported */
 			$this->database->sqliteCreateFunction('title_sort', function (string $name): ?string {
 				return preg_replace('/^(A|The|An)\s+(.*)$/i', '${2}, ${1}', $name, 1);
 			}, 1, PDO::SQLITE_DETERMINISTIC);

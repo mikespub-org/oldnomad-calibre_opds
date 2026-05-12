@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+- Minimum version of PHP updated to 8.3.
+
 ## 0.0.6 - 2025-09-28
 
 ### Changed

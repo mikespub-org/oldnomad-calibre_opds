@@ -20,8 +20,8 @@ use Traversable;
  * @property int $count
  */
 final class CalibreTag extends CalibreItem {
-	public const URI = 'tag';
-	public const CRITERION = CalibreBookCriteria::TAG;
+	public const string URI = 'tag';
+	public const CalibreBookCriteria CRITERION = CalibreBookCriteria::TAG;
 
 	/**
 	 * SQL statement to extract tags.
@@ -73,16 +73,8 @@ final class CalibreTag extends CalibreItem {
 		);
 	}
 
-	/**
-	 * Get tag by tag ID.
-	 *
-	 * @param ICalibreDB $db Calibre database.
-	 * @param mixed $id tag ID.
-	 *
-	 * @return self|null tag entry, or `null` if not found.
-	 * @throws PDOException on error.
-	 */
-	public static function getById(ICalibreDB $db, $id): ?self {
+	#[\Override]
+	public static function getById(ICalibreDB $db, $id): ?static {
 		$data = $db->querySingle(sprintf(self::SQL_TAGS, 'where tags.id = ?'), [$id]);
 		return is_null($data) ? null : new self($db, $data);
 	}

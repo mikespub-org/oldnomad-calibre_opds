@@ -21,8 +21,8 @@ use Traversable;
  * @property int $count
  */
 final class CalibreLanguage extends CalibreItem {
-	public const URI = 'lang';
-	public const CRITERION = CalibreBookCriteria::LANGUAGE;
+	public const string URI = 'lang';
+	public const CalibreBookCriteria CRITERION = CalibreBookCriteria::LANGUAGE;
 
 	/**
 	 * SQL statement to extract languages.
@@ -47,6 +47,7 @@ final class CalibreLanguage extends CalibreItem {
 	protected function mangle(ICalibreDB $db, array $data): array {
 		/** @var string $data['code'] */
 		$data['name'] = $data['code'];
+		/** @var array<string,mixed> $data */
 		return $data;
 	}
 
@@ -81,16 +82,8 @@ final class CalibreLanguage extends CalibreItem {
 		);
 	}
 
-	/**
-	 * Get language by language ID.
-	 *
-	 * @param ICalibreDB $db Calibre database.
-	 * @param mixed $id language ID.
-	 *
-	 * @return self|null language entry, or `null` if not found.
-	 * @throws PDOException on error.
-	 */
-	public static function getById(ICalibreDB $db, $id): ?self {
+	#[\Override]
+	public static function getById(ICalibreDB $db, $id): ?static {
 		$data = $db->querySingle(sprintf(self::SQL_LANGUAGES, 'where languages.id = ?'), [$id]);
 		return is_null($data) ? null : new self($db, $data);
 	}

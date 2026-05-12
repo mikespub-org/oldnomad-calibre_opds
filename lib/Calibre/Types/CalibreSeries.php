@@ -20,8 +20,8 @@ use Traversable;
  * @property int $count
  */
 final class CalibreSeries extends CalibreItem {
-	public const URI = 'series';
-	public const CRITERION = CalibreBookCriteria::SERIES;
+	public const string URI = 'series';
+	public const CalibreBookCriteria CRITERION = CalibreBookCriteria::SERIES;
 
 	/**
 	 * SQL statement to extract series.
@@ -73,16 +73,8 @@ final class CalibreSeries extends CalibreItem {
 		);
 	}
 
-	/**
-	 * Get series by series ID.
-	 *
-	 * @param ICalibreDB $db Calibre database.
-	 * @param mixed $id series ID.
-	 *
-	 * @return self|null series entry, or `null` if not found.
-	 * @throws PDOException on error.
-	 */
-	public static function getById(ICalibreDB $db, $id): ?self {
+	#[\Override]
+	public static function getById(ICalibreDB $db, $id): ?static {
 		$data = $db->querySingle(sprintf(self::SQL_SERIES, 'where series.id = ?'), [$id]);
 		return is_null($data) ? null : new self($db, $data);
 	}

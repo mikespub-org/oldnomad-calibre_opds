@@ -13,6 +13,11 @@ use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
 use UnexpectedValueException;
 
+/**
+ * Controller for settings.
+ *
+ * @api
+ */
 final class SettingsController extends Controller {
 	public function __construct(
 		IRequest $request,
@@ -27,7 +32,9 @@ final class SettingsController extends Controller {
 	 */
 	public function settings(string $libraryRoot): array {
 		try {
-			$this->settings->setLibrary($libraryRoot);
+			if (!$this->settings->setLibrary($libraryRoot)) {
+				$this->logger->error('Failed to set user library');
+			}
 		} catch (PreConditionNotMetException|UnexpectedValueException $e) {
 			$this->logger->error('Exception in ' . __FUNCTION__, [ 'exception' => $e ]);
 		}

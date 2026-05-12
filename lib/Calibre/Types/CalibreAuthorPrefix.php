@@ -21,7 +21,7 @@ use Traversable;
  * @property int $count
  */
 final class CalibreAuthorPrefix extends CalibreItem {
-	public const URI = 'author-prefix';
+	public const string URI = 'author-prefix';
 
 	/**
 	 * SQL statement to extract author prefixes.
@@ -46,6 +46,7 @@ final class CalibreAuthorPrefix extends CalibreItem {
 		/** @var string $data['prefix'] */
 		$data['id'] = $data['prefix'];
 		$data['name'] = $data['prefix'];
+		/** @var array<string,mixed> $data */
 		return $data;
 	}
 

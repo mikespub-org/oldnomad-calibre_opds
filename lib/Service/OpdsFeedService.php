@@ -10,6 +10,11 @@ use OCA\Calibre2OPDS\FeedBuilder\IOpdsFeedBuilder;
 use OCA\Calibre2OPDS\FeedBuilder\OpdsFeedBuilder;
 use OCP\IL10N;
 
+/**
+ * OPDS feed builder service.
+ *
+ * @api
+ */
 final class OpdsFeedService implements IOpdsFeedService {
 	public function __construct(
 		private ISettingsService $settings,

@@ -19,7 +19,7 @@ use Traversable;
  * @property string $value
  */
 final class CalibreBookId extends CalibreItem {
-	public const URI = 'book-id';
+	public const string URI = 'book-id';
 
 	/**
 	 * SQL statement to extract book identifiers.

@@ -18,6 +18,11 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use Psr\Container\ContainerInterface;
 
+/**
+ * Application class.
+ *
+ * @api
+ */
 final class Application extends App implements IBootstrap {
 	public const APP_ID = 'calibre_opds';
 

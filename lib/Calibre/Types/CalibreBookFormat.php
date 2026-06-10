@@ -74,7 +74,6 @@ final class CalibreBookFormat extends CalibreItem {
 		);
 	}
 
-
 	/**
 	 * Get specific data format for a book.
 	 *

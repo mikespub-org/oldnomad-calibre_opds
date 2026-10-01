@@ -23,7 +23,7 @@ use Traversable;
  * @property string $format
  */
 final class CalibreBookFormat extends CalibreItem {
-	public const URI = 'book-format';
+	public const string URI = 'book-format';
 
 	/**
 	 * SQL statement to extract book data.

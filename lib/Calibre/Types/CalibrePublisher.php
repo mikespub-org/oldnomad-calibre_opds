@@ -20,8 +20,8 @@ use Traversable;
  * @property int $count
  */
 final class CalibrePublisher extends CalibreItem {
-	public const URI = 'publisher';
-	public const CRITERION = CalibreBookCriteria::PUBLISHER;
+	public const string URI = 'publisher';
+	public const CalibreBookCriteria CRITERION = CalibreBookCriteria::PUBLISHER;
 
 	/**
 	 * SQL statement to extract authors.
@@ -73,16 +73,8 @@ final class CalibrePublisher extends CalibreItem {
 		);
 	}
 
-	/**
-	 * Get publisher by publisher ID.
-	 *
-	 * @param ICalibreDB $db Calibre database.
-	 * @param mixed $id publisher ID.
-	 *
-	 * @return self|null publisher entry, or `null` if not found.
-	 * @throws PDOException on error.
-	 */
-	public static function getById(ICalibreDB $db, $id): ?self {
+	#[\Override]
+	public static function getById(ICalibreDB $db, $id): ?static {
 		$data = $db->querySingle(sprintf(self::SQL_PUBLISHERS, 'where publishers.id = ?'), [$id]);
 		return is_null($data) ? null : new self($db, $data);
 	}

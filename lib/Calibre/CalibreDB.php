@@ -98,7 +98,7 @@ final class CalibreDB implements ICalibreDB {
 	 * @param string $sql SQL statement.
 	 * @param array $parameters SQL statement parameters.
 	 *
-	 * @return Traversable<array> list of result rows (associative arrays).
+	 * @return Traversable<array<string,mixed>> list of result rows (associative arrays).
 	 * @throws PDOException on failure.
 	 */
 	#[\Override]

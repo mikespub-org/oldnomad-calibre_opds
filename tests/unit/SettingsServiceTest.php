@@ -19,7 +19,7 @@ use Stubs\LoggerInterfaceStub;
 use Stubs\StorageStub;
 
 class SettingsServiceTest extends TestCase {
-	private const UID = 123;
+	private const string UID = '123';
 
 	use LoggerInterfaceStub;
 	use StorageStub;

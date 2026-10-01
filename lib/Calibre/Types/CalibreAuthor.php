@@ -22,8 +22,8 @@ use Traversable;
  * @property int $count
  */
 final class CalibreAuthor extends CalibreItem {
-	public const URI = 'author';
-	public const CRITERION = CalibreBookCriteria::AUTHOR;
+	public const string URI = 'author';
+	public const CalibreBookCriteria CRITERION = CalibreBookCriteria::AUTHOR;
 
 	/**
 	 * SQL statement to extract authors.
@@ -48,6 +48,7 @@ final class CalibreAuthor extends CalibreItem {
 
 	#[\Override]
 	protected function mangle(ICalibreDB $db, array $data): array {
+		/** @var array<string,mixed> $data */
 		if ($data['uri'] === '') {
 			$data['uri'] = null;
 		}
@@ -90,16 +91,8 @@ final class CalibreAuthor extends CalibreItem {
 		);
 	}
 
-	/**
-	 * Get author by author ID.
-	 *
-	 * @param ICalibreDB $db Calibre database.
-	 * @param mixed $id author ID.
-	 *
-	 * @return self|null author entry, or `null` if not found.
-	 * @throws PDOException on error.
-	 */
-	public static function getById(ICalibreDB $db, $id): ?self {
+	#[\Override]
+	public static function getById(ICalibreDB $db, $id): ?static {
 		$data = $db->querySingle(sprintf(self::SQL_AUTHORS, 'where authors.id = param'), [$id]);
 		return is_null($data) ? null : new self($db, $data);
 	}

@@ -9,6 +9,7 @@ namespace OCA\Calibre2OPDS\Calibre;
 use DateTimeImmutable;
 use DateTimeInterface;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreBookCriteria;
+use PDOException;
 
 /**
  * Base class for Calibre metadata items.
@@ -24,9 +25,8 @@ abstract class CalibreItem {
 	 * Subclasses __must__ override this.
 	 *
 	 * @var string
-	 * @psalm-suppress InvalidConstantAssignmentValue -- This is deliberate
 	 */
-	public const URI = null;
+	public const string URI = '???';
 	/**
 	 * Criterion that should be applied to books.
 	 *
@@ -34,7 +34,7 @@ abstract class CalibreItem {
 	 *
 	 * @var ?CalibreBookCriteria
 	 */
-	public const CRITERION = null;
+	public const ?CalibreBookCriteria CRITERION = null;
 
 	/**
 	 * Value used for empty timestamps.
@@ -43,10 +43,12 @@ abstract class CalibreItem {
 	 *
 	 * @var int
 	 */
-	private const NULL_TIMESTAMP = -58979923200;
+	private const int NULL_TIMESTAMP = -58979923200;
 
 	/**
 	 * Row contents.
+	 *
+	 * @var array<string,mixed>
 	 */
 	private array $data;
 
@@ -66,9 +68,10 @@ abstract class CalibreItem {
 	 * @param ICalibreDB $db Calibre database.
 	 * @param array $data result row data.
 	 *
-	 * @return array mangled data.
+	 * @return array<string,mixed> mangled data.
 	 */
 	protected function mangle(ICalibreDB $db, array $data): array {
+		/** @var array<string,mixed> */
 		return $data;
 	}
 
@@ -94,6 +97,7 @@ abstract class CalibreItem {
 		$line = $trace[0]['line'] ?? '???';
 		trigger_error(sprintf('Getting unknown property %s from object of class %s in %s on line %d',
 			$name, get_class($this), $file, $line), E_USER_ERROR);
+		/** @psalm-suppress UnevaluatedCode -- this can be evaluated if error is suppressed. */
 		return null;
 	}
 
@@ -113,5 +117,18 @@ abstract class CalibreItem {
 			return null;
 		}
 		return $timestamp;
+	}
+
+	/**
+	 * Get item by ID.
+	 *
+	 * @param ICalibreDB $db Calibre database.
+	 * @param mixed $id item ID.
+	 *
+	 * @return static|null item, or `null` if not found.
+	 * @throws PDOException on error.
+	 */
+	public static function getById(ICalibreDB $db, $id): ?static {
+		return null;
 	}
 }

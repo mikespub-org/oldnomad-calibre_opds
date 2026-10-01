@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Service for managing user settings for this app.
+ *
+ * @api
  */
 final class SettingsService implements ISettingsService {
 	/**

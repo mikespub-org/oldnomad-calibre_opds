@@ -40,7 +40,7 @@ use Traversable;
  * @property Traversable<CalibreBookId> $identifiers
  */
 final class CalibreBook extends CalibreItem {
-	public const URI = 'book';
+	public const string URI = 'book';
 
 	/**
 	 * SQL statement to extract books.
@@ -114,6 +114,7 @@ final class CalibreBook extends CalibreItem {
 		$data['tags'] = CalibreTag::getByBook($db, $book_id);
 		$data['formats'] = CalibreBookFormat::getByBook($db, $book_id);
 		$data['identifiers'] = CalibreBookId::getByBook($db, $book_id);
+		/** @var array<string,mixed> $data */
 		return $data;
 	}
 
@@ -164,16 +165,8 @@ final class CalibreBook extends CalibreItem {
 		);
 	}
 
-	/**
-	 * Get book by book ID.
-	 *
-	 * @param ICalibreDB $db Calibre database.
-	 * @param mixed $id book ID.
-	 *
-	 * @return self|null book entry, or `null` if not found.
-	 * @throws PDOException on error.
-	 */
-	public static function getById(ICalibreDB $db, $id): ?self {
+	#[\Override]
+	public static function getById(ICalibreDB $db, $id): ?static {
 		$data = $db->querySingle(sprintf(self::SQL_BOOKS, '', 'where books.id = ?', ''), [$id]);
 		return is_null($data) ? null : new self($db, $data);
 	}

@@ -17,7 +17,7 @@ interface ICalibreDB {
 	 *
 	 * @param string $sql SQL statement to execute.
 	 * @param array $parameters parameters for SQL statement.
-	 * @return Traversable<array> iterator over results, represented as associative arrays.
+	 * @return Traversable<array<string,mixed>> iterator over results, represented as associative arrays.
 	 */
 	public function query(string $sql, array $parameters = []): Traversable;
 
@@ -26,7 +26,7 @@ interface ICalibreDB {
 	 *
 	 * @param string $sql SQL statement to execute.
 	 * @param array $parameters parameters for SQL statement.
-	 * @return ?array resulting row, represented as an associative array.
+	 * @return ?array<string,mixed> resulting row, represented as an associative array.
 	 */
 	public function querySingle(string $sql, array $parameters = []): ?array;
 }

@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace OCA\Calibre2OPDS\Controller;
 
 use Exception;
-use OCA\Calibre2OPDS\Calibre\CalibreItem;
 use OCA\Calibre2OPDS\Calibre\ICalibreDB;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthor;
 use OCA\Calibre2OPDS\Calibre\Types\CalibreAuthorPrefix;
@@ -34,6 +33,11 @@ use OCP\IL10N;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Controller for OPDS export.
+ *
+ * @api
+ */
 final class OpdsController extends Controller {
 	private const DEFAULT_PREFIX_LENGTH = 1;
 
@@ -84,15 +88,15 @@ final class OpdsController extends Controller {
 	 * @PublicPage
 	 */
 	public function index(): Response {
-		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
-			$builder = $this->feed->createBuilder('index', $this->request->getParams(), $this->l->t('Calibre OPDS Library'));
-			$builder->addSubsectionItem('authors', 'author_prefixes', $this->l->t('Authors'), $this->l->t('All authors'));
-			$builder->addSubsectionItem('publishers', 'publishers', $this->l->t('Publishers'), $this->l->t('All publishers'));
-			$builder->addSubsectionItem('languages', 'languages', $this->l->t('Languages'), $this->l->t('All languages'));
-			$builder->addSubsectionItem('series', 'series', $this->l->t('Series'), $this->l->t('All series'));
-			$builder->addSubsectionItem('tags', 'tags', $this->l->t('Tags'), $this->l->t('All tags'));
-			$builder->addSubsectionItem('books', 'books', $this->l->t('Books'), $this->l->t('All books'));
-			return $builder->getResponse();
+		return $this->methodWrapper(function (): Response {
+			return $this->feed->createBuilder('index', $this->request->getParams(), $this->l->t('Calibre OPDS Library'))
+				->addSubsectionItem('authors', 'author_prefixes', $this->l->t('Authors'), $this->l->t('All authors'))
+				->addSubsectionItem('publishers', 'publishers', $this->l->t('Publishers'), $this->l->t('All publishers'))
+				->addSubsectionItem('languages', 'languages', $this->l->t('Languages'), $this->l->t('All languages'))
+				->addSubsectionItem('series', 'series', $this->l->t('Series'), $this->l->t('All series'))
+				->addSubsectionItem('tags', 'tags', $this->l->t('Tags'), $this->l->t('All tags'))
+				->addSubsectionItem('books', 'books', $this->l->t('Books'), $this->l->t('All books'))
+				->getResponse();
 		});
 	}
 
@@ -206,10 +210,6 @@ final class OpdsController extends Controller {
 			$refName = $id;
 			$critCase = CalibreBookCriteria::tryFrom($criterion);
 			if (!is_null($critCase) && !is_null($critClass = $critCase->getDataClass())) {
-				/**
-				 * @psalm-suppress UndefinedMethod -- this is a static method defined in subclasses
-				 * @var ?CalibreItem
-				 */
 				$refItem = $critClass::getById($lib, $id);
 				if (is_null($refItem)) {
 					return (new Response())->setStatus(Http::STATUS_NOT_FOUND);
@@ -262,7 +262,7 @@ final class OpdsController extends Controller {
 	 * @PublicPage
 	 */
 	public function searchXml(): Response {
-		return $this->methodWrapper(function (Folder $libPath, ICalibreDB $lib): Response {
+		return $this->methodWrapper(function (): Response {
 			$resp = new OpenSearchResponse(
 				/// TRANSLATORS: No more than 16 characters
 				$this->l->t('Search'),

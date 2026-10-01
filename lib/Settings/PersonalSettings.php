@@ -10,6 +10,11 @@ use OCA\Calibre2OPDS\Service\ISettingsService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 
+/**
+ * Settings interface.
+ *
+ * @api
+ */
 final class PersonalSettings implements ISettings {
 	public function __construct(
 		private ISettingsService $settings,
